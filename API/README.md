@@ -10,6 +10,9 @@ If you want create new database please insert in CMD belowa commands:
 ## Info:
 Link to POSTMAN: https://www.getpostman.com/collections/1d6a4248406e6ff0c984
 
+## DB schema:
+
+![](https://raw.githubusercontent.com/Niewidzialny84/PT_Project/peter/API/db_schema.png)
 # Endpoints:
 
 ## [POST] /api/users 
