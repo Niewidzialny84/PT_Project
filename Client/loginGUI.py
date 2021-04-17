@@ -105,12 +105,22 @@ class Ui_MainWindow(object):
         self.register_Button.setText(_translate("MainWindow", "Register"))
         self.language_Button.setText(_translate("MainWindow", "Polish Language"))
 
-
+class Window(QtWidgets.QMainWindow):
+    def mousePressEvent(self, QMouseEvent):
+        if QMouseEvent.button()==QtCore.Qt.LeftButton:
+            self.m_flag=True
+            self.m_Position=QMouseEvent.globalPos()-self.pos()
+            QMouseEvent.accept()
+            
+    def mouseMoveEvent(self, QMouseEvent):
+        if QtCore.Qt.LeftButton and self.m_flag:  
+                self.move(QMouseEvent.globalPos()-self.m_Position)
+        QMouseEvent.accept()
     
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
+    MainWindow = Window()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
