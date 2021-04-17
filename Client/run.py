@@ -1,3 +1,3 @@
 import login_GUI
 
-loginGUI.run_login_window()
+login_GUI.run_login_window()

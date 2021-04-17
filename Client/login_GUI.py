@@ -103,9 +103,15 @@ class Ui_MainWindow(object):
         self.register_Button.setText("Register")
         self.verticalLayout_4.addWidget(self.register_Button)
 
+        #Forgot password Button
+        self.forgot_Button = QtWidgets.QPushButton(self.centralwidget)
+        self.forgot_Button.setGeometry(QtCore.QRect(10, 120, 201, 23))
+        self.forgot_Button.setObjectName("forgot_Button")
+        self.forgot_Button.setText("Forgot Password")
+
         #Language Button
         self.language_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.language_Button.setGeometry(QtCore.QRect(10, 150, 201, 23))
+        self.language_Button.setGeometry(QtCore.QRect(10, 148, 201, 23))
         self.language_Button.setObjectName("language_Button")
         self.language_Button.setText("Polski")
         self.language_Button.clicked.connect(lambda:self.change_Language())
@@ -119,7 +125,7 @@ class Ui_MainWindow(object):
         self.middle_Line.setObjectName("middle_Line")
         # Left Line
         self.left_Line = QtWidgets.QFrame(self.centralwidget)
-        self.left_Line.setGeometry(QtCore.QRect(10, 130, 201, 16))
+        self.left_Line.setGeometry(QtCore.QRect(10, 138, 201, 16))
         self.left_Line.setFrameShape(QtWidgets.QFrame.HLine)
         self.left_Line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.left_Line.setObjectName("left_Line")
@@ -139,6 +145,7 @@ class Ui_MainWindow(object):
             self.password_Register_Text.setPlaceholderText("Hasło")
             self.confirm_Password_Register_Text.setPlaceholderText("Potwierdź Hasło")
             self.mail_Text.setPlaceholderText("E-Mail Użytkownika")
+            self.forgot_Button.setText("Zapomniałem Hasło")
         else:
             self.language_Button.setText("Polski")
             self.login_Button.setText("Login")
@@ -149,6 +156,7 @@ class Ui_MainWindow(object):
             self.password_Register_Text.setPlaceholderText("Password")
             self.confirm_Password_Register_Text.setPlaceholderText("Confirm Password")
             self.mail_Text.setPlaceholderText("User email")
+            self.forgot_Button.setText("Forgot Password")
 
 #MainWindow overrides
 class Window(QtWidgets.QMainWindow):
