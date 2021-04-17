@@ -58,7 +58,7 @@ with JSON body (first_username, second_username) to create new history entity
 	    "second_username": "multiKorzych"
     }
 
-## [POST] /api/history-manager -
+## [POST] /api/history-manager
 with JSON body (history_id, username, content) to create new history entity
 
     {
