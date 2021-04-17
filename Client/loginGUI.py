@@ -49,12 +49,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
+        #Nick entry
         self.nick_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget)
         self.nick_Text.setObjectName("nick_Text")
         self.verticalLayout_3.addWidget(self.nick_Text)
+        #Password entry
         self.password_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget)
         self.password_Text.setObjectName("password_Text")
         self.verticalLayout_3.addWidget(self.password_Text)
+        #Login button
         self.login_Button = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.login_Button.setObjectName("login_Button")
         self.login_Button.setText("Login")
@@ -67,18 +70,23 @@ class Ui_MainWindow(object):
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
+        #Nick entry
         self.nick_Register_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.nick_Register_Text.setObjectName("nick_Register_Text")
         self.verticalLayout_4.addWidget(self.nick_Register_Text)
+        #Password entry
         self.password_Register_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.password_Register_Text.setObjectName("password_Register_Text")
         self.verticalLayout_4.addWidget(self.password_Register_Text)
+        #Confirm entry
         self.confirm_Password_Register_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.confirm_Password_Register_Text.setObjectName("confirm_Password_Register_Text")
         self.verticalLayout_4.addWidget(self.confirm_Password_Register_Text)
+        #Mail entry
         self.mail_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.mail_Text.setObjectName("mail_Text")
         self.verticalLayout_4.addWidget(self.mail_Text)
+        #Register button
         self.register_Button = QtWidgets.QPushButton(self.verticalLayoutWidget_2)
         self.register_Button.setObjectName("register_Button")
         self.register_Button.setText("Register")
@@ -138,7 +146,7 @@ class Window(QtWidgets.QMainWindow):
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
     
 #Core
-if __name__ == "__main__":
+def run_login_window():
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = Window()
     ui = Ui_MainWindow()
