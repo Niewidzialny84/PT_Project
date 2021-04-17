@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
+import login_Check
 
 #Ui of the Main Window
 class Ui_MainWindow(object):
@@ -58,12 +59,14 @@ class Ui_MainWindow(object):
         self.password_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget)
         self.password_Text.setObjectName("password_Text")
         self.password_Text.setPlaceholderText("Password")
+        self.password_Text.setEchoMode(QtWidgets.QLineEdit.Password)
         self.verticalLayout_3.addWidget(self.password_Text)
         #Login button
         self.login_Button = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.login_Button.setObjectName("login_Button")
         self.login_Button.setText("Login")
         self.verticalLayout_3.addWidget(self.login_Button)
+        self.login_Button.clicked.connect(lambda:login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()))
 
         #Right register side
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
@@ -81,11 +84,13 @@ class Ui_MainWindow(object):
         self.password_Register_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.password_Register_Text.setObjectName("password_Register_Text")
         self.password_Register_Text.setPlaceholderText("Password")
+        self.password_Register_Text.setEchoMode(QtWidgets.QLineEdit.Password)
         self.verticalLayout_4.addWidget(self.password_Register_Text)
         #Confirm entry
         self.confirm_Password_Register_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.confirm_Password_Register_Text.setObjectName("confirm_Password_Register_Text")
         self.confirm_Password_Register_Text.setPlaceholderText("Confirm Password")
+        self.confirm_Password_Register_Text.setEchoMode(QtWidgets.QLineEdit.Password)
         self.verticalLayout_4.addWidget(self.confirm_Password_Register_Text)
         #Mail entry
         self.mail_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
@@ -137,7 +142,7 @@ class Ui_MainWindow(object):
         else:
             self.language_Button.setText("Polski")
             self.login_Button.setText("Login")
-            self.register_Button.setText("Register")
+            self.register_Button.setText("Register") 
             self.nick_Text.setPlaceholderText("Username")
             self.password_Text.setPlaceholderText("Password")
             self.nick_Register_Text.setPlaceholderText("Username")
