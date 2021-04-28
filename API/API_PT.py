@@ -241,6 +241,8 @@ class HistoryManager(Resource):
                 return make_response(jsonify({'Message': 'NOT_EXIST'}), 404)
             else:
                 return make_response(jsonify({"history_id" : history_id}), 200)
+        else:
+            return make_response(jsonify({'Message': 'BAD_REQUEST'}), 400)
 
     @staticmethod
     def post():
@@ -282,6 +284,8 @@ class HistoryManager(Resource):
             else:
                 return make_response(jsonify({'Message': 'CONFLICT'}), 409)
         
+         return make_response(jsonify({'Message': 'BAD_REQUEST'}), 400)
+        
     @staticmethod
     def delete():
         try: 
@@ -294,15 +298,16 @@ class HistoryManager(Resource):
         if not first_username or second_username:
             return make_response(jsonify({ 'Message': 'Must provide proper args.' }), 400)
 
-        history = History.query.get(first_username = first_username, second_username = second_username)
+        history = History.query.filter_by(first_username = first_username, second_username = second_username).first()
         history_content = HistoryContent.query.filter_by(id = history.id).all()
         
         if (history or history_content) == None:
             return make_response(jsonify({ 'Message': 'History not exist!' }), 404)
 
         db.session.delete(history)
-        db.session.delete(history_content)
-        db.session.commit()
+        for h in history_content:
+            db.session.delete(h)
+            db.session.commit()
 
         return make_response(jsonify({'Message': f'History {id} deleted.'}), 200)
 
