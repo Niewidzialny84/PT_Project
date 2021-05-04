@@ -101,6 +101,7 @@ class Ui_MainWindow(object):
         self.search_Results.setGeometry(QtCore.QRect(810, 70, 161, 461))
         self.search_Results.setObjectName("search_Results")
         self.search_Results.setModel(self.search_filter)
+        self.search_Results.clicked.connect(self.select_conversation)
 
         #Active user nick
         self.nick_Label = QtWidgets.QLabel(self.centralwidget)
@@ -158,6 +159,10 @@ class Ui_MainWindow(object):
             #TODO translate the buttons
             message.setStandardButtons(QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
             message.exec_()
+
+#TODO this has to load the chat once it's there
+    def select_conversation(self, item):
+        self.chat_With_Label.setText(item.data())
 
 #TODO has to send and not only write but needs a server
     #Handle the press enter event
