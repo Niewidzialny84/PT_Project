@@ -5,6 +5,15 @@ import sys, time
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
 
+        #Test Users
+        names = ('Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka')
+        self.model = QtGui.QStandardItemModel(len(names), 1)
+        for row, name in enumerate(names):
+            item = QtGui.QStandardItem(name)
+            self.model.setItem(row, 0, item)
+        self.search_filter = QtCore.QSortFilterProxyModel()
+        self.search_filter.setSourceModel(self.model)
+
         #Main settings of the widget
         MainWindow.setObjectName("MainWindow")
         MainWindow.setFixedSize(974, 617)
@@ -18,7 +27,7 @@ class Ui_MainWindow(object):
         self.quit_Button.setObjectName("quit_Button")
         self.quit_Button.setText("X")
         self.quit_Button.clicked.connect(lambda:MainWindow.close())
-
+        #
         self.minimize_Button = QtWidgets.QPushButton(self.centralwidget)
         self.minimize_Button.setGeometry(QtCore.QRect(894, 0, 41, 31))
         self.minimize_Button.setObjectName("minimize_Button")
@@ -39,7 +48,7 @@ class Ui_MainWindow(object):
         self.line.setFrameShape(QtWidgets.QFrame.VLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
-        
+        #
         self.line_2 = QtWidgets.QFrame(self.centralwidget)
         self.line_2.setGeometry(QtCore.QRect(10, 30, 771, 16))
         self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
@@ -85,17 +94,13 @@ class Ui_MainWindow(object):
         self.search_Entry.setGeometry(QtCore.QRect(810, 40, 161, 20))
         self.search_Entry.setObjectName("search_Entry")
         self.search_Entry.setPlaceholderText("Search")
+        self.search_Entry.textChanged.connect(self.search_filter.setFilterRegExp)
 
         #Search result table
-        self.search_Results = QtWidgets.QTableView(self.centralwidget)
-        self.search_Results.setGeometry(QtCore.QRect(810, 70, 141, 461))
+        self.search_Results = QtWidgets.QListView(self.centralwidget)
+        self.search_Results.setGeometry(QtCore.QRect(810, 70, 161, 461))
         self.search_Results.setObjectName("search_Results")
-        
-        #Search scroll? Maybe remove?
-        self.search_Scroll = QtWidgets.QScrollBar(self.centralwidget)
-        self.search_Scroll.setGeometry(QtCore.QRect(950, 70, 16, 461))
-        self.search_Scroll.setOrientation(QtCore.Qt.Vertical)
-        self.search_Scroll.setObjectName("search_Scroll")
+        self.search_Results.setModel(self.search_filter)
 
         #Active user nick
         self.nick_Label = QtWidgets.QLabel(self.centralwidget)
