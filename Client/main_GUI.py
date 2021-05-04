@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys
+import sys, time
 
 
 class Ui_MainWindow(object):
@@ -75,6 +75,10 @@ class Ui_MainWindow(object):
         self.chat_Enter_Field = QtWidgets.QTextEdit(self.centralwidget)
         self.chat_Enter_Field.setGeometry(QtCore.QRect(10, 540, 781, 71))
         self.chat_Enter_Field.setObjectName("chat_Enter_Field")
+        #Event when pressing enter
+        self.event = EventFilter()
+        self.chat_Enter_Field.installEventFilter(self.event)
+        self.event.event_signal.connect(lambda:self.handle_send())
 
         #Field to enter the search
         self.search_Entry = QtWidgets.QLineEdit(self.centralwidget)
@@ -115,6 +119,7 @@ class Ui_MainWindow(object):
         self.logout_Button.setGeometry(QtCore.QRect(890, 580, 81, 31))
         self.logout_Button.setObjectName("logout_Button")
         self.logout_Button.setText("Logout")
+        self.logout_Button.clicked.connect(lambda:self.logout(self.language_Button.text()))
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -131,6 +136,40 @@ class Ui_MainWindow(object):
             self.logout_Button.setText("Logout")
             self.search_Entry.setPlaceholderText("Search")
 
+    #Logout
+    def logout(self,language):
+        if(language=="Polski"):
+            message = QtWidgets.QMessageBox()
+            message.setWindowTitle("Log out")
+            message.setIcon(QtWidgets.QMessageBox.Question)
+            message.setText("Are you sure you want to log out?")
+            message.setStandardButtons(QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+            message.exec_()
+        else:
+            message = QtWidgets.QMessageBox()
+            message.setWindowTitle("Wylogowywanie")
+            message.setIcon(QtWidgets.QMessageBox.Question)
+            message.setText("Czy na pewno chcesz się wylogować?")
+            #TODO translate the buttons
+            message.setStandardButtons(QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+            message.exec_()
+
+#TODO has to send and not only write but needs a server
+    #Handle the press enter event
+    def handle_send(self):
+        self.chat_Field.append(self.chat_Enter_Field.toPlainText())
+        self.chat_Enter_Field.clear()
+
+#Event handler looking for pressing enter on the chat window
+class EventFilter(QtCore.QObject):
+
+    event_signal = QtCore.pyqtSignal(bool)
+
+    def eventFilter(self, obj, event):
+        if event.type() == QtCore.QEvent.KeyPress and event.key() == QtCore.Qt.Key_Return:
+            self.event_signal.emit(True)
+            return True
+        return super().eventFilter(obj, event)
 
 class Window(QtWidgets.QMainWindow):
     def mousePressEvent(self, QMouseEvent):
