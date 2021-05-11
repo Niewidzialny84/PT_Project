@@ -13,12 +13,12 @@ class Client(object):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         self.addr = ('127.0.0.1',7777)
-
+        print('run')
         self.s = self.context.wrap_socket(self.sock,server_hostname=self.addr[0])
-        print(ssl.OPENSSL_VERSION)
+
         self.s.connect(self.addr)
 
-        self.send('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+        self.s.send('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'.encode())
         print(str(self.s))
 
         self.s.close()

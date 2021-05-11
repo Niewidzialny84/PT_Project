@@ -1,25 +1,51 @@
-import socket, threading, ssl,time, datetime, pytz
+import socket, threading, ssl
+import os
 
-class User(object):
-    def __init__(self, conn, addr):
+from enum import Enum
+
+from users import User
+from logger import Logger
+
+class Header(Enum):
+    '''Enum of avaible headers for package with amount of arguments'''
+
+    ACK = [0,0] #Acknowledment
+    ERR = [1,0] #Any type error
+    DIS = [2,0] #Disconnection
+    MSG = [3,4] #Message max 512 bytes
+    LOG = [4,2] #Login
+    SES = [5,1] #Session
+    REG = [6,4] #Register
+    LIS = [7,1] #List of users
+
+
+class UserContainer(object):
+    def __init__(self):
         super().__init__()
 
-        self.address = addr
-        self.socket = conn
+        self.connections = []
+        self.UUIDs = set()
 
-class UserLogged(User):
-    def __init__(self, conn, addr):
-        super().__init__(conn, addr)
+    def add(self, user: User):
+        self.connections.append(user)
+        user.uuid = self.getID()
+        
+    def getID(self):
+        for i in range(1000):
+            if not self.UUIDs.issuperset(set([i])):
+                self.UUIDs.add(i)
+                return i
 
-class Logger(object):
-    @staticmethod
-    def log(text: str):
-        threading.Thread(target=Logger._logtask,args=(text,)).start()
-
-    @staticmethod
-    def _logtask(text: str):
-        t = '[ '+ datetime.datetime.now(pytz.timezone('Europe/Warsaw')).strftime("%Y-%m-%d %H:%M:%S")+' ]  '
-        print(t+str(text))
+    def remove(self, user: User):
+        self.connections.remove(user)
+        self.UUIDs.remove(user.id)
+    
+    def remove(self, uuid: int):
+        for x in self.connections:
+            if x.id == uuid:
+                self.remove(x)
+                break
+                
 
 class Server(object):
     def __init__(self, ip: str, port: int):
@@ -29,15 +55,16 @@ class Server(object):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((ip,port))
 
-        #self.context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-        #self.context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
         self.context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
         self.context.options |= ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1
         self.context.set_ciphers('AES256+ECDH:AES256+EDH')
+        self.context.load_cert_chain(certfile=str(os.path.dirname(os.path.abspath(__file__))+'/cert.pem'))
 
         self.innerAddr = self.sock.getsockname()
 
         self.running = True
+
+        self.users = UserContainer()
     
     def run(self):
         self.sock.listen(100)
@@ -51,20 +78,30 @@ class Server(object):
                 Logger.log('Connection from: '+str(addr))
 
                 wrap = self.context.wrap_socket(c,server_side=True)
-                #wrap = ssl.SSLSocket(c)
 
-                user = User(wrap,addr)
+                user = User(wrap,addr) 
+                self.users.add(user)
 
                 threading.Thread(target=self.userHandler, args=(user,)).start()
+
+                Logger.log('Encrypted connection from:'+str(addr))
             except socket.error:
                 break
 
     def userHandler(self, user: User):
-        while self.running:
+        while self.running and user.connected:
             try:
                 data = user.socket.recv(1024)
+                
+                if data != '':
+                    Logger.log('Recived'+str(data))
+                    if isinstance(user,UserLogged):
+                        print('handle logged')
+                    else:
+                        print('handle unnloged')
             except socket.error:
-                user.socket.close()
+                self.users.remove(user)                
+                user.quit()
                 break
 
     def stop(self):
