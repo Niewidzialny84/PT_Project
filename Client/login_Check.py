@@ -35,3 +35,82 @@ def login_Check(nick, password,language):
             message.setIcon(QMessageBox.Critical)
             message.setText("Nie podano nazwy użytkownika!")
             message.exec_()
+
+
+def forgot_Check(nick, language):
+    nick_pattern = re.compile("^.+$")
+    if(nick_pattern.match(nick)):
+        return True
+    else:
+        if(language=="Polski"):
+            message = QMessageBox()
+            message.setWindowTitle("Error")
+            message.setIcon(QMessageBox.Critical)
+            message.setText("No username given!")
+            message.exec_()
+        else:
+            message = QMessageBox()
+            message.setWindowTitle("Błąd")
+            message.setIcon(QMessageBox.Critical)
+            message.setText("Nie podano nazwy użytkownika!")
+            message.exec_()
+
+def register_Check(nick, password, confirm, mail, language):
+    nick_pattern = re.compile("^.+$")
+    password_pattern = re.compile("^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])[A-Za-z\d]{8,}$")
+    mail_pattern = re.compile("^.+@.+\..$")
+    if(nick_pattern.match(nick)):
+        if(not password_pattern.match(password)):
+            if(language=="Polski"):
+                message = QMessageBox()
+                message.setWindowTitle("Error")
+                message.setIcon(QMessageBox.Critical)
+                message.setText("The password has to contain at least 8 characters, a upper case letter, a lower case letter and a digit!")
+                message.exec_()
+            else:
+                message = QMessageBox()
+                message.setWindowTitle("Błąd")
+                message.setIcon(QMessageBox.Critical)
+                message.setText("Hasło musi zawierać przynajmniej 8 znaków, jedną wielką literę, jedną małą literę i cyfrę!")
+                message.exec_()
+        elif(password != confirm):
+            if(language=="Polski"):
+                message = QMessageBox()
+                message.setWindowTitle("Error")
+                message.setIcon(QMessageBox.Critical)
+                message.setText("Pasword confirmation doesn't match password!")
+                message.exec_()
+            else:
+                message = QMessageBox()
+                message.setWindowTitle("Błąd")
+                message.setIcon(QMessageBox.Critical)
+                message.setText("Potwierdzenie hasła nie jest spójne z hasłem!")
+                message.exec_()
+        elif(not mail_pattern.match(mail)):
+            if(language=="Polski"):
+                message = QMessageBox()
+                message.setWindowTitle("Error")
+                message.setIcon(QMessageBox.Critical)
+                message.setText("Mail is incorrect!")
+                message.exec_()
+            else:
+                message = QMessageBox()
+                message.setWindowTitle("Błąd")
+                message.setIcon(QMessageBox.Critical)
+                message.setText("Niepoprawny E-Mail!")
+                message.exec_()
+        else:
+            return True
+    else:
+        if(language=="Polski"):
+            message = QMessageBox()
+            message.setWindowTitle("Error")
+            message.setIcon(QMessageBox.Critical)
+            message.setText("No username given!")
+            message.exec_()
+        else:
+            message = QMessageBox()
+            message.setWindowTitle("Błąd")
+            message.setIcon(QMessageBox.Critical)
+            message.setText("Nie podano nazwy użytkownika!")
+            message.exec_()

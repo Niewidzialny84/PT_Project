@@ -102,12 +102,14 @@ class Ui_MainWindow(object):
         self.register_Button.setObjectName("register_Button")
         self.register_Button.setText("Register")
         self.verticalLayout_4.addWidget(self.register_Button)
+        self.register_Button.clicked.connect(lambda:login_Check.register_Check(self.nick_Register_Text.text(),self.password_Register_Text.text(),self.confirm_Password_Register_Text.text(),self.mail_Text.text(),self.language_Button.text()))
 
         #Forgot password Button
         self.forgot_Button = QtWidgets.QPushButton(self.centralwidget)
         self.forgot_Button.setGeometry(QtCore.QRect(10, 120, 201, 23))
         self.forgot_Button.setObjectName("forgot_Button")
         self.forgot_Button.setText("Forgot Password")
+        self.forgot_Button.clicked.connect(lambda:login_Check.forgot_Check(self.nick_Text.text(),self.language_Button.text()))
 
         #Language Button
         self.language_Button = QtWidgets.QPushButton(self.centralwidget)
