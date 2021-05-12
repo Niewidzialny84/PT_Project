@@ -1,4 +1,5 @@
 from enum import Enum
+import json
 
 class ProtocolVersion(Enum):
     V1 = 1
@@ -8,7 +9,7 @@ class Header(Enum):
 
     ACK = 0 #Acknowledment
     ERR = 1 #Any type error
-    DIS = 2#Disconnection
+    DIS = 2 #Disconnection
     MSG = 3 #Message max 512 bytes
     LOG = 4 #Login
     SES = 5 #Session
@@ -39,6 +40,7 @@ class Header(Enum):
     @staticmethod
     def decode(headerBytes):
         '''Header decoder for to know how more bytes are needed to read'''
+        
         headerBytes = headerBytes.hex()
 
         byte1 = format(int(headerBytes[0:2],16),'b').zfill(8)
@@ -48,26 +50,57 @@ class Header(Enum):
         if version != ProtocolVersion.V1.value:
             raise ValueError('Invalid version')
 
-        payloadSize = int(headerBytes[2:6],16)
-        
+        payloadSize = int(headerBytes[2:6],16)   
 
         return headerType,payloadSize
 
 class Protocol(object):
     @staticmethod
-    def encode(headerType: Header, data: str,**kwargs):
+    def encode(headerType: Header, **kwargs):
+        '''Encoding data to return a specified header and data to be send'''
 
-        #TODO: Create special encoding depending on the heder type
+        data = ''
+        msg = kwargs.get('msg',None)
+        login = kwargs.get('login',None)
+        password = kwargs.get('password',None)
 
-        encodedData = data.encode()
+        if headerType == Header.ACK and data == '':
+            data = data
+        elif headerType == Header.ERR or headerType == Header.DIS or headerType == Header.MSG:
+            data = {'MSG': msg}
+        elif headerType == Header.LOG:
+            if login != None or password != None:
+                data = {'LOGIN': login, 'PASSWORD': password}
+            else:
+                raise TypeError('-login- Missing login or password')
+        elif headerType == Header.REG:
+            email = kwargs.get('email',None)
+            if login != None or password != None or email != None:
+                data = {'LOGIN': login, 'PASSWORD': password, 'EMAIL':email}
+            else:
+                raise TypeError('-register- Missing login or password or email')
+        elif headerType == Header.SES:
+            session = kwargs.get('session',None)
+            if session != None:
+                data = {'SESSION': session}
+            else:
+                raise TypeError('-session- Missiong session id')
+        elif headerType == Header.LIS:
+            users = kwargs.get('users', [])
+            if users != []:
+                data = {'USERS': users}
+            else:
+                raise TypeError('-list- Missing users list')
+            
+        
+        encodedData = json.dumps(data).encode()
         header = Header.encode(headerType,len(encodedData))
 
         return header,encodedData
 
     @staticmethod
     def decode(data: str):
-        
-        #TODO: Add special decoding
+        '''Decoding data into dict array which should be used based on header'''
 
-        return data.decode()
+        return json.loads(data.decode())
 

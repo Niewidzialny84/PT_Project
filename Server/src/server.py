@@ -1,9 +1,8 @@
 import socket, threading, ssl
 import os
 
-from users import User
+from users import User, UserLogged
 from logger import Logger
-
 
 class UserContainer(object):
     def __init__(self):
@@ -31,6 +30,9 @@ class UserContainer(object):
             if x.id == uuid:
                 self.remove(x)
                 break
+    
+    def replace(self, a: User, b: User):
+        self.connections.insert(self.connections.index(a),b)
                 
 
 class Server(object):
@@ -77,14 +79,10 @@ class Server(object):
     def userHandler(self, user: User):
         while self.running and user.connected:
             try:
-                data = user.socket.recv(1024)
-                
-                if data != '':
-                    Logger.log('Recived'+str(data))
-                    if isinstance(user,UserLogged):
-                        print('handle logged')
-                    else:
-                        print('handle unnloged')
+                ret = user.handle()
+                if isinstance(ret, UserLogged):
+                    self.users.replace(user,ret)
+                    user = ret
             except socket.error:
                 self.users.remove(user)                
                 user.quit()
