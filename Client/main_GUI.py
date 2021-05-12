@@ -1,7 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys, time
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
 
@@ -67,6 +66,9 @@ class Ui_MainWindow(object):
         self.chat_Field.setGeometry(QtCore.QRect(10, 60, 781, 471))
         self.chat_Field.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignBottom)
         self.chat_Field.setReadOnly(True)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.chat_Field.setFont(font)
         self.chat_Field.setObjectName("chat_Field")
 
         #TODO this is only a test
@@ -84,6 +86,11 @@ class Ui_MainWindow(object):
         self.chat_Enter_Field = QtWidgets.QTextEdit(self.centralwidget)
         self.chat_Enter_Field.setGeometry(QtCore.QRect(10, 540, 781, 71))
         self.chat_Enter_Field.setObjectName("chat_Enter_Field")
+        self.chat_Enter_Field.setAcceptRichText(False)
+        self.chat_Enter_Field.textChanged.connect(self.cut_Enter_Field)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.chat_Enter_Field.setFont(font)
         #Event when pressing enter
         self.event = EventFilter()
         self.chat_Enter_Field.installEventFilter(self.event)
@@ -131,6 +138,12 @@ class Ui_MainWindow(object):
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    #Cut the text above 250 characters
+    def cut_Enter_Field(self):
+        if len(self.chat_Enter_Field.toPlainText()) > 250:
+            self.chat_Enter_Field.setText(self.chat_Enter_Field.toPlainText()[:250])
+            self.chat_Enter_Field.moveCursor(QtGui.QTextCursor.End)
+
     #Temporary change language        
     def change_Language(self):
         if(self.language_Button.text() == "Polski"):
@@ -167,8 +180,9 @@ class Ui_MainWindow(object):
 #TODO has to send and not only write but needs a server
     #Handle the press enter event
     def handle_send(self):
-        self.chat_Field.append(self.chat_Enter_Field.toPlainText())
-        self.chat_Enter_Field.clear()
+        if self.chat_Enter_Field.toPlainText() != "":
+            self.chat_Field.append(self.chat_Enter_Field.toPlainText())
+            self.chat_Enter_Field.clear()
 
 #Event handler looking for pressing enter on the chat window
 class EventFilter(QtCore.QObject):
