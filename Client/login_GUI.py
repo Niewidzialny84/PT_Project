@@ -11,6 +11,7 @@ class Ui_MainWindow(ABC):
         #Main Settings
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
+        MainWindow.resize(450, 180)
         MainWindow.setFixedSize(450, 180)
         MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -142,8 +143,6 @@ class Ui_MainWindow(ABC):
     @abstractmethod
     def log_into(self):
         pass
-        #if login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()):
-            #self.switch_window.emit(True)
 
     def change_Language(self):
         if(self.language_Button.text() == "Polski"):

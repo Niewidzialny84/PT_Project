@@ -1,7 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys, time
+from abc import ABC, abstractmethod
 
-class Ui_MainWindow(object):
+class Ui_MainWindow(ABC):
     def setupUi(self, MainWindow):
 
         #Test Users
@@ -15,6 +16,7 @@ class Ui_MainWindow(object):
 
         #Main settings of the widget
         MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(974, 617)
         MainWindow.setFixedSize(974, 617)
         MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -166,23 +168,9 @@ class Ui_MainWindow(object):
             self.search_Entry.setPlaceholderText("Search")
 
     #Logout
+    @abstractmethod
     def logout(self,language):
-        if(language=="Polski"):
-            message = QtWidgets.QMessageBox()
-            message.setWindowTitle("Log out")
-            message.setIcon(QtWidgets.QMessageBox.Question)
-            message.setText("Are you sure you want to log out?")
-            message.addButton("Yes", QtWidgets.QMessageBox.YesRole)
-            message.addButton("No", QtWidgets.QMessageBox.NoRole)
-            message.exec_()
-        else:
-            message = QtWidgets.QMessageBox()
-            message.setWindowTitle("Wylogowywanie")
-            message.setIcon(QtWidgets.QMessageBox.Question)
-            message.setText("Czy na pewno chcesz się wylogować?")
-            message.addButton("Tak", QtWidgets.QMessageBox.YesRole)
-            message.addButton("Nie", QtWidgets.QMessageBox.NoRole)
-            message.exec_()
+        pass
 
 #TODO this has to load the chat once it's there
     def select_conversation(self, item):

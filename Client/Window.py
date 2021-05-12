@@ -7,13 +7,30 @@ import login_Check
 class login_Master(login_GUI.Ui_MainWindow):
     def log_into(self):
         if login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()):
-            change_to_main(MainWindow)
+            change_to_main()
+
+class main_Master(main_GUI.Ui_MainWindow):
+    def logout(self,language):
+        if(language=="Polski"):
+            message = QtWidgets.QMessageBox()
+            message.setWindowTitle("Log out")
+            message.setIcon(QtWidgets.QMessageBox.Question)
+            message.setText("Are you sure you want to log out?")
+            ok = message.addButton("Yes", QtWidgets.QMessageBox.YesRole)
+            ok.pressed.connect(lambda:change_to_login(message))
+            message.addButton("No", QtWidgets.QMessageBox.NoRole)
+            message.exec_()
+        else:
+            message = QtWidgets.QMessageBox()
+            message.setWindowTitle("Wylogowywanie")
+            message.setIcon(QtWidgets.QMessageBox.Question)
+            message.setText("Czy na pewno chcesz się wylogować?")
+            ok = message.addButton("Tak", QtWidgets.QMessageBox.YesRole)
+            ok.pressed.connect(lambda:change_to_login())
+            message.addButton("Nie", QtWidgets.QMessageBox.NoRole)
+            message.exec_()
 
 class Window(QtWidgets.QMainWindow):
-    def setup(self, main_ui):
-        self.login_ui = login_Master()
-        self.main_ui = main_ui
-        self.login_ui.setupUi(MainWindow)
 
     def mousePressEvent(self, QMouseEvent):
         if QMouseEvent.button()==QtCore.Qt.LeftButton:
@@ -31,16 +48,19 @@ class Window(QtWidgets.QMainWindow):
         self.m_flag=False
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
 
-def change_to_main(MainWindow):
-    NewWindow = Window()
-    ui = main_GUI.Ui_MainWindow()
-    ui.setupUi(NewWindow)
-    MainWindow.hide()
-    NewWindow.show()  
+def change_to_main():
+    main_ui.setupUi(MainWindow)
+    MainWindow.show()
+
+def change_to_login(message):
+    login_ui.setupUi(MainWindow)
+    MainWindow.show()
+    message.close()
 
 app = QtWidgets.QApplication(sys.argv)
-main_ui = main_GUI.Ui_MainWindow()
 MainWindow = Window()
-MainWindow.setup(main_ui)
+login_ui = login_Master()
+main_ui = main_Master()
+login_ui.setupUi(MainWindow)
 MainWindow.show()
 app.exec_()
