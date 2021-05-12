@@ -10,8 +10,8 @@ class login_Master(login_GUI.Ui_MainWindow):
             change_to_main()
 
 class main_Master(main_GUI.Ui_MainWindow):
-    def logout(self,language):
-        if(language=="Polski"):
+    def logout(self):
+        if(self.language=="English"):
             message = QtWidgets.QMessageBox()
             message.setWindowTitle("Log out")
             message.setIcon(QtWidgets.QMessageBox.Question)
@@ -26,7 +26,7 @@ class main_Master(main_GUI.Ui_MainWindow):
             message.setIcon(QtWidgets.QMessageBox.Question)
             message.setText("Czy na pewno chcesz się wylogować?")
             ok = message.addButton("Tak", QtWidgets.QMessageBox.YesRole)
-            ok.pressed.connect(lambda:change_to_login())
+            ok.pressed.connect(lambda:change_to_login(message))
             message.addButton("Nie", QtWidgets.QMessageBox.NoRole)
             message.exec_()
 
@@ -49,7 +49,7 @@ class Window(QtWidgets.QMainWindow):
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
 
 def change_to_main():
-    main_ui.setupUi(MainWindow)
+    main_ui.setupUi(MainWindow,login_ui.language_Button.text())
     MainWindow.show()
 
 def change_to_login(message):

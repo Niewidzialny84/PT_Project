@@ -3,7 +3,9 @@ import sys, time
 from abc import ABC, abstractmethod
 
 class Ui_MainWindow(ABC):
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow, language):
+
+        self.language = language
 
         #Test Users
         names = ('Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka')
@@ -136,14 +138,16 @@ class Ui_MainWindow(ABC):
         self.language_Button.setGeometry(QtCore.QRect(810, 580, 75, 31))
         self.language_Button.setObjectName("language_Button")
         self.language_Button.setText("Polski")
-        self.language_Button.clicked.connect(lambda:self.change_Language())
+        self.language_Button.clicked.connect(self.change_Language)
 
         #Logout Button
         self.logout_Button = QtWidgets.QPushButton(self.centralwidget)
         self.logout_Button.setGeometry(QtCore.QRect(890, 580, 81, 31))
         self.logout_Button.setObjectName("logout_Button")
         self.logout_Button.setText("Logout")
-        self.logout_Button.clicked.connect(lambda:self.logout(self.language_Button.text()))
+        self.logout_Button.clicked.connect(self.logout)
+
+        self.change_Language()
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -158,18 +162,20 @@ class Ui_MainWindow(ABC):
 
     #Temporary change language        
     def change_Language(self):
-        if(self.language_Button.text() == "Polski"):
+        if(self.language == "English"):
             self.language_Button.setText("English")
             self.logout_Button.setText("Wyloguj")
             self.search_Entry.setPlaceholderText("Szukaj")
+            self.language = "Polski"
         else:
             self.language_Button.setText("Polski")
             self.logout_Button.setText("Logout")
             self.search_Entry.setPlaceholderText("Search")
+            self.language = "English"
 
     #Logout
     @abstractmethod
-    def logout(self,language):
+    def logout(self):
         pass
 
 #TODO this has to load the chat once it's there
