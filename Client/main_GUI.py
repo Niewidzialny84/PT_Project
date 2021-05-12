@@ -199,27 +199,3 @@ class EventFilter(QtCore.QObject):
             self.event_signal.emit(True)
             return True
         return super().eventFilter(obj, event)
-
-class Window(QtWidgets.QMainWindow):
-    def mousePressEvent(self, QMouseEvent):
-        if QMouseEvent.button()==QtCore.Qt.LeftButton:
-            self.m_flag=True
-            self.m_Position=QMouseEvent.globalPos()-self.pos()
-            self.setCursor(QtGui.QCursor(QtCore.Qt.ClosedHandCursor))
-            QMouseEvent.accept()
-            
-    def mouseMoveEvent(self, QMouseEvent):
-        if QtCore.Qt.LeftButton and self.m_flag:  
-                self.move(QMouseEvent.globalPos()-self.m_Position)
-        QMouseEvent.accept()
-
-    def mouseReleaseEvent(self, QMouseEvent):
-        self.m_flag=False
-        self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
-
-#app = QtWidgets.QApplication(sys.argv)
-#MainWindow = Window()
-#ui = Ui_MainWindow()
-#ui.setupUi(MainWindow)
-#MainWindow.show()
-#app.exec_()

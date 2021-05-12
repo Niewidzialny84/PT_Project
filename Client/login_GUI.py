@@ -167,30 +167,3 @@ class Ui_MainWindow(ABC):
             self.confirm_Password_Register_Text.setPlaceholderText("Confirm Password")
             self.mail_Text.setPlaceholderText("User email")
             self.forgot_Button.setText("Forgot Password")
-
-#MainWindow overrides
-class Window(QtWidgets.QMainWindow):
-    def mousePressEvent(self, QMouseEvent):
-        if QMouseEvent.button()==QtCore.Qt.LeftButton:
-            self.m_flag=True
-            self.m_Position=QMouseEvent.globalPos()-self.pos()
-            self.setCursor(QtGui.QCursor(QtCore.Qt.ClosedHandCursor))
-            QMouseEvent.accept()
-            
-    def mouseMoveEvent(self, QMouseEvent):
-        if QtCore.Qt.LeftButton and self.m_flag:  
-                self.move(QMouseEvent.globalPos()-self.m_Position)
-        QMouseEvent.accept()
-
-    def mouseReleaseEvent(self, QMouseEvent):
-        self.m_flag=False
-        self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
-    
-#Core
-def run_login_window():
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = Window()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    app.exec_()
