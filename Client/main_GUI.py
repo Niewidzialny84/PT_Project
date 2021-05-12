@@ -95,6 +95,15 @@ class Ui_MainWindow(object):
         self.event = EventFilter()
         self.chat_Enter_Field.installEventFilter(self.event)
         self.event.event_signal.connect(lambda:self.handle_send())
+        #Show how many characters you have used
+        self.chat_Limit = QtWidgets.QLabel(self.centralwidget)
+        self.chat_Limit.setGeometry(QtCore.QRect(738, 595, 51, 15))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.chat_Limit.setFont(font)
+        self.chat_Limit.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.chat_Limit.setObjectName("chat_Limit")
+        self.chat_Limit.setText("0/250")
 
         #Field to enter the search
         self.search_Entry = QtWidgets.QLineEdit(self.centralwidget)
@@ -138,11 +147,12 @@ class Ui_MainWindow(object):
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    #Cut the text above 250 characters
+    #Cut the text above 250 characters and show number of characters
     def cut_Enter_Field(self):
         if len(self.chat_Enter_Field.toPlainText()) > 250:
             self.chat_Enter_Field.setText(self.chat_Enter_Field.toPlainText()[:250])
             self.chat_Enter_Field.moveCursor(QtGui.QTextCursor.End)
+        self.chat_Limit.setText(str(len(self.chat_Enter_Field.toPlainText()))+"/250")
 
     #Temporary change language        
     def change_Language(self):
