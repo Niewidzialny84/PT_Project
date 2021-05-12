@@ -35,6 +35,7 @@ def login_Check(nick, password,language):
             message.setIcon(QMessageBox.Critical)
             message.setText("Nazwa użytkownika musi składać się z liter alfabetu angielskiego i/lub cyfer!")
             message.exec_()
+    return False
 
 
 def forgot_Check(nick, language):
@@ -54,6 +55,7 @@ def forgot_Check(nick, language):
             message.setIcon(QMessageBox.Critical)
             message.setText("Nazwa użytkownika musi składać się z liter alfabetu angielskiego i/lub cyfer!")
             message.exec_()
+    return False
 
 def register_Check(nick, password, confirm, mail, language):
     nick_pattern = re.compile("^[a-zA-Z0-9]+$")
@@ -114,3 +116,4 @@ def register_Check(nick, password, confirm, mail, language):
             message.setIcon(QMessageBox.Critical)
             message.setText("Nazwa użytkownika musi składać się z liter alfabetu angielskiego i/lub cyfer!")
             message.exec_()
+    return False

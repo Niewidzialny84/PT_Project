@@ -223,9 +223,9 @@ class Window(QtWidgets.QMainWindow):
         self.m_flag=False
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
 
-app = QtWidgets.QApplication(sys.argv)
-MainWindow = Window()
-ui = Ui_MainWindow()
-ui.setupUi(MainWindow)
-MainWindow.show()
-app.exec_()
+#app = QtWidgets.QApplication(sys.argv)
+#MainWindow = Window()
+#ui = Ui_MainWindow()
+#ui.setupUi(MainWindow)
+#MainWindow.show()
+#app.exec_()

@@ -1,10 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import login_Check
+from abc import ABC, abstractmethod
 
 #Ui of the Main Window
-class Ui_MainWindow(object):
+class Ui_MainWindow(ABC):
+
     def setupUi(self, MainWindow):
+
         #Main Settings
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
@@ -66,7 +69,7 @@ class Ui_MainWindow(object):
         self.login_Button.setObjectName("login_Button")
         self.login_Button.setText("Login")
         self.verticalLayout_3.addWidget(self.login_Button)
-        self.login_Button.clicked.connect(lambda:login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()))
+        self.login_Button.clicked.connect(self.log_into)
 
         #Right register side
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
@@ -135,6 +138,12 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    @abstractmethod
+    def log_into(self):
+        pass
+        #if login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()):
+            #self.switch_window.emit(True)
 
     def change_Language(self):
         if(self.language_Button.text() == "Polski"):
