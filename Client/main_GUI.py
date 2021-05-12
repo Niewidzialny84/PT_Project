@@ -74,7 +74,7 @@ class Ui_MainWindow(object):
         #TODO this is only a test
         file = QtCore.QFile('macbeth.txt')
         if not file.open(QtCore.QIODevice.ReadOnly):
-            QtGui.QMessageBox.information(None, 'info', file.errorString())
+            QtWidgets.QMessageBox.information(None, 'info', file.errorString())
         stream = QtCore.QTextStream(file)
         self.chat_Field.setText(stream.readAll())
         #Scrollbarjump to bottom
@@ -172,15 +172,16 @@ class Ui_MainWindow(object):
             message.setWindowTitle("Log out")
             message.setIcon(QtWidgets.QMessageBox.Question)
             message.setText("Are you sure you want to log out?")
-            message.setStandardButtons(QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+            message.addButton("Yes", QtWidgets.QMessageBox.YesRole)
+            message.addButton("No", QtWidgets.QMessageBox.NoRole)
             message.exec_()
         else:
             message = QtWidgets.QMessageBox()
             message.setWindowTitle("Wylogowywanie")
             message.setIcon(QtWidgets.QMessageBox.Question)
             message.setText("Czy na pewno chcesz się wylogować?")
-            #TODO translate the buttons
-            message.setStandardButtons(QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+            message.addButton("Tak", QtWidgets.QMessageBox.YesRole)
+            message.addButton("Nie", QtWidgets.QMessageBox.NoRole)
             message.exec_()
 
 #TODO this has to load the chat once it's there
