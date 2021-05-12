@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 def login_Check(nick, password,language):
-    nick_pattern = re.compile("^.+$")
+    nick_pattern = re.compile("^[a-zA-Z0-9]+$")
     password_pattern = re.compile("^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])[A-Za-z\d]{8,}$")
     if(nick_pattern.match(nick)):
         if(password_pattern.match(password)):
@@ -27,18 +27,18 @@ def login_Check(nick, password,language):
             message = QMessageBox()
             message.setWindowTitle("Error")
             message.setIcon(QMessageBox.Critical)
-            message.setText("No username given!")
+            message.setText("Username has to consist of english letters and/or numbers!")
             message.exec_()
         else:
             message = QMessageBox()
             message.setWindowTitle("Błąd")
             message.setIcon(QMessageBox.Critical)
-            message.setText("Nie podano nazwy użytkownika!")
+            message.setText("Nazwa użytkownika musi składać się z liter alfabetu angielskiego i/lub cyfer!")
             message.exec_()
 
 
 def forgot_Check(nick, language):
-    nick_pattern = re.compile("^.+$")
+    nick_pattern = re.compile("^[a-zA-Z0-9]+$")
     if(nick_pattern.match(nick)):
         return True
     else:
@@ -46,17 +46,17 @@ def forgot_Check(nick, language):
             message = QMessageBox()
             message.setWindowTitle("Error")
             message.setIcon(QMessageBox.Critical)
-            message.setText("No username given!")
+            message.setText("Username has to consist of english letters and/or numbers!")
             message.exec_()
         else:
             message = QMessageBox()
             message.setWindowTitle("Błąd")
             message.setIcon(QMessageBox.Critical)
-            message.setText("Nie podano nazwy użytkownika!")
+            message.setText("Nazwa użytkownika musi składać się z liter alfabetu angielskiego i/lub cyfer!")
             message.exec_()
 
 def register_Check(nick, password, confirm, mail, language):
-    nick_pattern = re.compile("^.+$")
+    nick_pattern = re.compile("^[a-zA-Z0-9]+$")
     password_pattern = re.compile("^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])[A-Za-z\d]{8,}$")
     mail_pattern = re.compile("^.+@.+\..$")
     if(nick_pattern.match(nick)):
@@ -106,11 +106,11 @@ def register_Check(nick, password, confirm, mail, language):
             message = QMessageBox()
             message.setWindowTitle("Error")
             message.setIcon(QMessageBox.Critical)
-            message.setText("No username given!")
+            message.setText("Username has to consist of english letters and/or numbers!")
             message.exec_()
         else:
             message = QMessageBox()
             message.setWindowTitle("Błąd")
             message.setIcon(QMessageBox.Critical)
-            message.setText("Nie podano nazwy użytkownika!")
+            message.setText("Nazwa użytkownika musi składać się z liter alfabetu angielskiego i/lub cyfer!")
             message.exec_()
