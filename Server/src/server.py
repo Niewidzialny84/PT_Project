@@ -1,22 +1,8 @@
 import socket, threading, ssl
 import os
 
-from enum import Enum
-
 from users import User
 from logger import Logger
-
-class Header(Enum):
-    '''Enum of avaible headers for package with amount of arguments'''
-
-    ACK = [0,0] #Acknowledment
-    ERR = [1,0] #Any type error
-    DIS = [2,0] #Disconnection
-    MSG = [3,4] #Message max 512 bytes
-    LOG = [4,2] #Login
-    SES = [5,1] #Session
-    REG = [6,4] #Register
-    LIS = [7,1] #List of users
 
 
 class UserContainer(object):
