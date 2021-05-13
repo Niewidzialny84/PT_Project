@@ -10,8 +10,8 @@ class Ui_MainWindow(ABC):
         #Options Window
         self.OptionsWindow = Options_Window()
         self.OptionsWindow.setup()
-        self.OptionsWindow.show()
-        self.OptionsWindow.close_signal.connect(lambda:MainWindow.close())
+        self.OptionsWindow.close_signal.connect(lambda:self.close_by_Options(MainWindow))
+        self.OptionsWindow.hide_signal.connect(lambda:MainWindow.show())
 
         #Test Users
         names = ('Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka')
@@ -144,7 +144,7 @@ class Ui_MainWindow(ABC):
         self.language_Button.setGeometry(QtCore.QRect(810, 580, 75, 31))
         self.language_Button.setObjectName("language_Button")
         self.language_Button.setText("Polski")
-        self.language_Button.clicked.connect(self.change_Language)
+        self.language_Button.clicked.connect(lambda:self.open_Options(MainWindow))#self.change_Language)
 
         #Logout Button
         self.logout_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -165,6 +165,16 @@ class Ui_MainWindow(ABC):
             self.chat_Enter_Field.setText(self.chat_Enter_Field.toPlainText()[:250])
             self.chat_Enter_Field.moveCursor(QtGui.QTextCursor.End)
         self.chat_Limit.setText(str(len(self.chat_Enter_Field.toPlainText()))+"/250")
+
+    #Open Options
+    def open_Options(self, MainWindow):
+        MainWindow.hide()
+        self.OptionsWindow.show()
+    
+    #Force close when options closed
+    def close_by_Options(self, MainWindow):
+        MainWindow.show()
+        MainWindow.close()
 
     #Temporary change language        
     def change_Language(self):
@@ -281,6 +291,7 @@ class Ui_OptionWindow(object):
         self.back_Button.setGeometry(QtCore.QRect(80, 260, 111, 23))
         self.back_Button.setObjectName("back_Button")
         self.back_Button.setText("Back")
+        self.back_Button.pressed.connect(lambda:self.open_Main(OptionsWindow))
 
         #All the seperator lines
         self.line = QtWidgets.QFrame(self.centralwidget)
@@ -309,10 +320,15 @@ class Ui_OptionWindow(object):
 
         OptionsWindow.setCentralWidget(self.centralwidget)
         QtCore.QMetaObject.connectSlotsByName(OptionsWindow)
+
+    def open_Main(self, OptionsWindow):
+        OptionsWindow.hide_signal.emit()
+        OptionsWindow.hide()
         
 #Options Window
 class Options_Window(QtWidgets.QMainWindow):
 
+    hide_signal = QtCore.pyqtSignal()
     close_signal = QtCore.pyqtSignal()
 
     def setup(self):
