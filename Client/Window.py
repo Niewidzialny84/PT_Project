@@ -4,6 +4,8 @@ import login_GUI
 import main_GUI
 import login_Check
 
+#TODO true communication with server!!!
+
 class login_Master(login_GUI.Ui_MainWindow):
     def log_into(self):
         #TODO

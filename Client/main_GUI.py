@@ -250,7 +250,7 @@ class Ui_OptionWindow(object):
         self.app_Name.setObjectName("app_Name")
         self.app_Name.setText(" Najfajniejszy Komunikator")
 
-        #Box with languages
+        #Box with languages #TODO
         self.language_Box = QtWidgets.QComboBox(self.centralwidget)
         self.language_Box.setGeometry(QtCore.QRect(10, 40, 251, 22))
         self.language_Box.setObjectName("language_Box")
@@ -283,7 +283,7 @@ class Ui_OptionWindow(object):
         self.mail_Button.setText("Change Mail")
         self.mail_Button.pressed.connect(lambda:self.update_Mail())
 
-        #Delete account button
+        #Delete account button #TODO
         self.delete_Button = QtWidgets.QPushButton(self.centralwidget)
         self.delete_Button.setGeometry(QtCore.QRect(80, 220, 111, 23))
         self.delete_Button.setObjectName("delete_Button")
