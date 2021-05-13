@@ -60,7 +60,7 @@ def forgot_Check(nick, language):
 def register_Check(nick, password, confirm, mail, language):
     nick_pattern = re.compile("^[a-zA-Z0-9]+$")
     password_pattern = re.compile("^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])[A-Za-z\d]{8,}$")
-    mail_pattern = re.compile("^.+@.+\..$")
+    mail_pattern = re.compile("^.+@.+\..+$")
     if(nick_pattern.match(nick)):
         if(not password_pattern.match(password)):
             if(language=="Polski"):
@@ -116,4 +116,44 @@ def register_Check(nick, password, confirm, mail, language):
             message.setIcon(QMessageBox.Critical)
             message.setText("Nazwa użytkownika musi składać się z liter alfabetu angielskiego i/lub cyfer!")
             message.exec_()
+    return False
+
+#Check if new password is correct. Reversed language check
+def password_New_Check(password, language):
+    password_pattern = re.compile("^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])[A-Za-z\d]{8,}$")
+    if(not password_pattern.match(password)):
+        if(language=="English"):
+            message = QMessageBox()
+            message.setWindowTitle("Error")
+            message.setIcon(QMessageBox.Critical)
+            message.setText("The password has to contain at least 8 characters, a upper case letter, a lower case letter and a digit!")
+            message.exec_()
+        else:
+            message = QMessageBox()
+            message.setWindowTitle("Błąd")
+            message.setIcon(QMessageBox.Critical)
+            message.setText("Hasło musi zawierać przynajmniej 8 znaków, jedną wielką literę, jedną małą literę i cyfrę!")
+            message.exec_()
+    else:
+        return True
+    return False
+
+#Check if new mail is correct. Reversed language check
+def mail_New_Check(mail, language):
+    mail_pattern = re.compile("^.+@.+\..+$")
+    if(not mail_pattern.match(mail)):
+        if(language=="English"):
+            message = QMessageBox()
+            message.setWindowTitle("Error")
+            message.setIcon(QMessageBox.Critical)
+            message.setText("Mail is incorrect!")
+            message.exec_()
+        else:
+            message = QMessageBox()
+            message.setWindowTitle("Błąd")
+            message.setIcon(QMessageBox.Critical)
+            message.setText("Niepoprawny E-Mail!")
+            message.exec_()
+    else:
+        return True
     return False

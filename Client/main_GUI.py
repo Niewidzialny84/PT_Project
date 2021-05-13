@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys, time
 from abc import ABC, abstractmethod
+import login_Check
 
 class Ui_MainWindow(ABC):
     def setupUi(self, MainWindow, language):
@@ -140,11 +141,11 @@ class Ui_MainWindow(ABC):
         self.nick_Label.setText("MyNick")
 
         #Change language button
-        self.language_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.language_Button.setGeometry(QtCore.QRect(810, 580, 75, 31))
-        self.language_Button.setObjectName("language_Button")
-        self.language_Button.setText("Polski")
-        self.language_Button.clicked.connect(lambda:self.open_Options(MainWindow))#self.change_Language)
+        self.options_Button = QtWidgets.QPushButton(self.centralwidget)
+        self.options_Button.setGeometry(QtCore.QRect(810, 580, 75, 31))
+        self.options_Button.setObjectName("language_Button")
+        self.options_Button.setText("Polski")
+        self.options_Button.clicked.connect(lambda:self.open_Options(MainWindow))#self.change_Language)
 
         #Logout Button
         self.logout_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -179,12 +180,12 @@ class Ui_MainWindow(ABC):
     #Temporary change language        
     def change_Language(self):
         if(self.language == "English"):
-            self.language_Button.setText("English")
+            self.options_Button.setText("Ustawienie")
             self.logout_Button.setText("Wyloguj")
             self.search_Entry.setPlaceholderText("Szukaj")
             self.language = "Polski"
         else:
-            self.language_Button.setText("Polski")
+            self.options_Button.setText("Settings")
             self.logout_Button.setText("Logout")
             self.search_Entry.setPlaceholderText("Search")
             self.language = "English"
@@ -267,6 +268,7 @@ class Ui_OptionWindow(object):
         self.password_Button.setGeometry(QtCore.QRect(80, 110, 111, 23))
         self.password_Button.setObjectName("password_Button")
         self.password_Button.setText("Change Password")
+        self.password_Button.pressed.connect(lambda:self.update_Password())
 
         #Field to enter mail
         self.mail_Edit = QtWidgets.QLineEdit(self.centralwidget)
@@ -279,6 +281,7 @@ class Ui_OptionWindow(object):
         self.mail_Button.setGeometry(QtCore.QRect(80, 180, 111, 23))
         self.mail_Button.setObjectName("mail_Button")
         self.mail_Button.setText("Change Mail")
+        self.mail_Button.pressed.connect(lambda:self.update_Mail())
 
         #Delete account button
         self.delete_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -324,6 +327,15 @@ class Ui_OptionWindow(object):
     def open_Main(self, OptionsWindow):
         OptionsWindow.hide_signal.emit()
         OptionsWindow.hide()
+
+    #TODO
+    def update_Mail(self):
+        if login_Check.mail_New_Check(self.mail_Edit.text(),"English"):
+            pass
+    #TODO
+    def update_Password(self):
+        if login_Check.password_New_Check(self.password_Edit.text(),"English"):
+            pass
         
 #Options Window
 class Options_Window(QtWidgets.QMainWindow):
