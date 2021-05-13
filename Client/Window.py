@@ -10,7 +10,7 @@ class login_Master(login_GUI.Ui_MainWindow):
     def log_into(self):
         #TODO usunąć #
         #if login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()):
-            change_to_main()
+            login_to_main()
 
 class main_Master(main_GUI.Ui_MainWindow):
     def logout(self):
@@ -71,8 +71,8 @@ class Window(QtWidgets.QMainWindow):
         self.m_flag=False
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
 
-def change_to_main():
-    main_ui.setupUi(MainWindow,login_ui.language_Button.text())
+def login_to_main():
+    main_ui.setupUi(MainWindow,login_ui.language_Button.text(),login_ui.nick_Text.text())
     MainWindow.show()
 
 def change_to_login(message):

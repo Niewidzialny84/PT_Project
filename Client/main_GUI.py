@@ -3,8 +3,10 @@ import sys, time
 from abc import ABC, abstractmethod
 import login_Check
 
+maxlength = 256
+
 class Ui_MainWindow(ABC):
-    def setupUi(self, MainWindow, language):
+    def setupUi(self, MainWindow, language, username):
 
         self.language = language
 
@@ -72,7 +74,7 @@ class Ui_MainWindow(ABC):
         self.chat_With_Label.setGeometry(QtCore.QRect(10, 40, 771, 16))
         self.chat_With_Label.setAlignment(QtCore.Qt.AlignCenter)
         self.chat_With_Label.setObjectName("chat_With_Label")
-        self.chat_With_Label.setText("XZY")
+        self.chat_With_Label.setText("")
 
         #Chat field
         self.chat_Field = QtWidgets.QTextEdit(self.centralwidget)
@@ -140,7 +142,7 @@ class Ui_MainWindow(ABC):
         self.nick_Label.setFont(font)
         self.nick_Label.setAlignment(QtCore.Qt.AlignCenter)
         self.nick_Label.setObjectName("nick_Label")
-        self.nick_Label.setText("MyNick")
+        self.nick_Label.setText(username)
 
         #Change language button
         self.options_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -279,6 +281,7 @@ class Ui_OptionWindow(object):
         self.password_Edit = QtWidgets.QLineEdit(self.centralwidget)
         self.password_Edit.setGeometry(QtCore.QRect(10, 80, 251, 20))
         self.password_Edit.setObjectName("password_Edit")
+        self.password_Edit.setMaxLength(maxlength)
         self.password_Edit.setPlaceholderText("Enter new password")
 
         #Update password button
@@ -292,6 +295,7 @@ class Ui_OptionWindow(object):
         self.mail_Edit = QtWidgets.QLineEdit(self.centralwidget)
         self.mail_Edit.setGeometry(QtCore.QRect(10, 150, 251, 20))
         self.mail_Edit.setObjectName("mail_Edit")
+        self.mail_Edit.setMaxLength(maxlength)
         self.mail_Edit.setPlaceholderText("Enter new mail")
 
         #Update mail button

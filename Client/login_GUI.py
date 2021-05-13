@@ -3,6 +3,8 @@ import sys
 import login_Check
 from abc import ABC, abstractmethod
 
+maxlength = 256
+
 #Ui of the Main Window
 class Ui_MainWindow(ABC):
 
@@ -58,12 +60,14 @@ class Ui_MainWindow(ABC):
         self.nick_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget)
         self.nick_Text.setObjectName("nick_Text")
         self.nick_Text.setPlaceholderText("Username")
+        self.nick_Text.setMaxLength(maxlength)
         self.verticalLayout_3.addWidget(self.nick_Text)
         #Password entry
         self.password_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget)
         self.password_Text.setObjectName("password_Text")
         self.password_Text.setPlaceholderText("Password")
         self.password_Text.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.password_Text.setMaxLength(maxlength)
         self.verticalLayout_3.addWidget(self.password_Text)
         #Login button
         self.login_Button = QtWidgets.QPushButton(self.verticalLayoutWidget)
@@ -83,23 +87,27 @@ class Ui_MainWindow(ABC):
         self.nick_Register_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.nick_Register_Text.setObjectName("nick_Register_Text")
         self.nick_Register_Text.setPlaceholderText("Username")
+        self.nick_Register_Text.setMaxLength(maxlength)
         self.verticalLayout_4.addWidget(self.nick_Register_Text)
         #Password entry
         self.password_Register_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.password_Register_Text.setObjectName("password_Register_Text")
         self.password_Register_Text.setPlaceholderText("Password")
         self.password_Register_Text.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.password_Register_Text.setMaxLength(maxlength)
         self.verticalLayout_4.addWidget(self.password_Register_Text)
         #Confirm entry
         self.confirm_Password_Register_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.confirm_Password_Register_Text.setObjectName("confirm_Password_Register_Text")
         self.confirm_Password_Register_Text.setPlaceholderText("Confirm Password")
         self.confirm_Password_Register_Text.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.confirm_Password_Register_Text.setMaxLength(maxlength)
         self.verticalLayout_4.addWidget(self.confirm_Password_Register_Text)
         #Mail entry
         self.mail_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.mail_Text.setObjectName("mail_Text")
         self.mail_Text.setPlaceholderText("User Email")
+        self.mail_Text.setMaxLength(maxlength)
         self.verticalLayout_4.addWidget(self.mail_Text)
         #Register button
         self.register_Button = QtWidgets.QPushButton(self.verticalLayoutWidget_2)
