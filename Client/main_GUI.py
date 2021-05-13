@@ -11,8 +11,9 @@ class Ui_MainWindow(ABC):
         #Options Window
         self.OptionsWindow = Options_Window()
         self.OptionsWindow.setup()
-        self.OptionsWindow.close_signal.connect(lambda:self.close_by_Options(MainWindow))
+        self.OptionsWindow.close_signal.connect(lambda:MainWindow.close())
         self.OptionsWindow.hide_signal.connect(lambda:MainWindow.show())
+        self.OptionsWindow.change_language_signal.connect(lambda:self.change_Language())
 
         #Test Users
         names = ('Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka')
@@ -144,7 +145,7 @@ class Ui_MainWindow(ABC):
         self.options_Button = QtWidgets.QPushButton(self.centralwidget)
         self.options_Button.setGeometry(QtCore.QRect(810, 580, 75, 31))
         self.options_Button.setObjectName("language_Button")
-        self.options_Button.setText("Polski")
+        self.options_Button.setText("Settings")
         self.options_Button.clicked.connect(lambda:self.open_Options(MainWindow))#self.change_Language)
 
         #Logout Button
@@ -154,6 +155,7 @@ class Ui_MainWindow(ABC):
         self.logout_Button.setText("Logout")
         self.logout_Button.clicked.connect(self.logout)
 
+        #Start change language
         self.change_Language()
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -170,12 +172,8 @@ class Ui_MainWindow(ABC):
     #Open Options
     def open_Options(self, MainWindow):
         MainWindow.hide()
-        self.OptionsWindow.show()
-    
-    #Force close when options closed
-    def close_by_Options(self, MainWindow):
-        MainWindow.show()
-        MainWindow.close()
+        self.OptionsWindow.show()  
+        self.OptionsWindow.active = True     
 
     #Temporary change language        
     def change_Language(self):
@@ -184,11 +182,25 @@ class Ui_MainWindow(ABC):
             self.logout_Button.setText("Wyloguj")
             self.search_Entry.setPlaceholderText("Szukaj")
             self.language = "Polski"
+            self.OptionsWindow.options_ui.language_Box.setCurrentIndex(1)
+            self.OptionsWindow.options_ui.password_Edit.setPlaceholderText("Wpisz nowe hasło")
+            self.OptionsWindow.options_ui.password_Button.setText("Zmień hasło")
+            self.OptionsWindow.options_ui.mail_Edit.setPlaceholderText("Wpisz nowy E-Mail")
+            self.OptionsWindow.options_ui.mail_Button.setText("Zmień E-Mail")
+            self.OptionsWindow.options_ui.delete_Button.setText("Usuń konto")
+            self.OptionsWindow.options_ui.back_Button.setText("Wróć")
         else:
             self.options_Button.setText("Settings")
             self.logout_Button.setText("Logout")
             self.search_Entry.setPlaceholderText("Search")
             self.language = "English"
+            self.OptionsWindow.options_ui.language_Box.setCurrentIndex(0)
+            self.OptionsWindow.options_ui.password_Edit.setPlaceholderText("Enter new password")
+            self.OptionsWindow.options_ui.password_Button.setText("Change Password")
+            self.OptionsWindow.options_ui.mail_Edit.setPlaceholderText("Enter new mail")
+            self.OptionsWindow.options_ui.mail_Button.setText("Change Mail")
+            self.OptionsWindow.options_ui.delete_Button.setText("Delete Account")
+            self.OptionsWindow.options_ui.back_Button.setText("Back")
 
     #Logout
     @abstractmethod
@@ -256,6 +268,7 @@ class Ui_OptionWindow(object):
         self.language_Box.setObjectName("language_Box")
         self.language_Box.addItem("English")
         self.language_Box.addItem("Polski")
+        self.language_Box.currentIndexChanged.connect(lambda:self.send_Change_Language(OptionsWindow))
 
         #Field to enter new password
         self.password_Edit = QtWidgets.QLineEdit(self.centralwidget)
@@ -325,8 +338,13 @@ class Ui_OptionWindow(object):
         QtCore.QMetaObject.connectSlotsByName(OptionsWindow)
 
     def open_Main(self, OptionsWindow):
+        OptionsWindow.active = False
         OptionsWindow.hide_signal.emit()
         OptionsWindow.hide()
+
+    def send_Change_Language(self, OptionsWindow):
+        if(OptionsWindow.active == True):
+            OptionsWindow.change_language_signal.emit()
 
     #TODO
     def update_Mail(self):
@@ -340,8 +358,11 @@ class Ui_OptionWindow(object):
 #Options Window
 class Options_Window(QtWidgets.QMainWindow):
 
+    active = False
+
     hide_signal = QtCore.pyqtSignal()
     close_signal = QtCore.pyqtSignal()
+    change_language_signal = QtCore.pyqtSignal()
 
     def setup(self):
         self.options_ui = Ui_OptionWindow()
@@ -364,5 +385,6 @@ class Options_Window(QtWidgets.QMainWindow):
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        self.active = False
         self.close_signal.emit()
         return super().closeEvent(a0)
