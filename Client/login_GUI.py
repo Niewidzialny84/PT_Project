@@ -3,7 +3,7 @@ import sys
 import login_Check
 from abc import ABC, abstractmethod
 
-maxlength = 256
+maxlength = 20
 
 #Ui of the Main Window
 class Ui_MainWindow(ABC):
@@ -107,7 +107,7 @@ class Ui_MainWindow(ABC):
         self.mail_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.mail_Text.setObjectName("mail_Text")
         self.mail_Text.setPlaceholderText("User Email")
-        self.mail_Text.setMaxLength(maxlength)
+        self.mail_Text.setMaxLength(256)
         self.verticalLayout_4.addWidget(self.mail_Text)
         #Register button
         self.register_Button = QtWidgets.QPushButton(self.verticalLayoutWidget_2)

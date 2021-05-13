@@ -3,7 +3,7 @@ import sys, time
 from abc import ABC, abstractmethod
 import login_Check
 
-maxlength = 256
+maxlength = 20
 
 class Ui_MainWindow(ABC):
     def setupUi(self, MainWindow, language, username):
@@ -295,7 +295,7 @@ class Ui_OptionWindow(object):
         self.mail_Edit = QtWidgets.QLineEdit(self.centralwidget)
         self.mail_Edit.setGeometry(QtCore.QRect(10, 150, 251, 20))
         self.mail_Edit.setObjectName("mail_Edit")
-        self.mail_Edit.setMaxLength(maxlength)
+        self.mail_Edit.setMaxLength(256)
         self.mail_Edit.setPlaceholderText("Enter new mail")
 
         #Update mail button
