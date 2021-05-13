@@ -14,6 +14,7 @@ class Ui_MainWindow(ABC):
         self.OptionsWindow.close_signal.connect(lambda:MainWindow.close())
         self.OptionsWindow.hide_signal.connect(lambda:MainWindow.show())
         self.OptionsWindow.change_language_signal.connect(lambda:self.change_Language())
+        self.OptionsWindow.delete_signal.connect(lambda:self.delete_Account())
 
         #Test Users
         names = ('Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka')
@@ -207,6 +208,10 @@ class Ui_MainWindow(ABC):
     def logout(self):
         pass
 
+    @abstractmethod
+    def delete_Account(self):
+        pass
+
 #TODO this has to load the chat once it's there
     def select_conversation(self, item):
         self.chat_With_Label.setText(item.data())
@@ -262,7 +267,7 @@ class Ui_OptionWindow(object):
         self.app_Name.setObjectName("app_Name")
         self.app_Name.setText(" Najfajniejszy Komunikator")
 
-        #Box with languages #TODO
+        #Box with languages
         self.language_Box = QtWidgets.QComboBox(self.centralwidget)
         self.language_Box.setGeometry(QtCore.QRect(10, 40, 251, 22))
         self.language_Box.setObjectName("language_Box")
@@ -296,11 +301,12 @@ class Ui_OptionWindow(object):
         self.mail_Button.setText("Change Mail")
         self.mail_Button.pressed.connect(lambda:self.update_Mail())
 
-        #Delete account button #TODO
+        #Delete account button
         self.delete_Button = QtWidgets.QPushButton(self.centralwidget)
         self.delete_Button.setGeometry(QtCore.QRect(80, 220, 111, 23))
         self.delete_Button.setObjectName("delete_Button")
         self.delete_Button.setText("Delete Account")
+        self.delete_Button.pressed.connect(lambda:OptionsWindow.delete_signal.emit())
 
         #Button to go back
         self.back_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -363,6 +369,7 @@ class Options_Window(QtWidgets.QMainWindow):
     hide_signal = QtCore.pyqtSignal()
     close_signal = QtCore.pyqtSignal()
     change_language_signal = QtCore.pyqtSignal()
+    delete_signal = QtCore.pyqtSignal()
 
     def setup(self):
         self.options_ui = Ui_OptionWindow()
