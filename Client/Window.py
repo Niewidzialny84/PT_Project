@@ -6,7 +6,8 @@ import login_Check
 
 class login_Master(login_GUI.Ui_MainWindow):
     def log_into(self):
-        if login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()):
+        #TODO
+        #if login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()):
             change_to_main()
 
 class main_Master(main_GUI.Ui_MainWindow):
