@@ -64,9 +64,7 @@ class Protocol(object):
         login = kwargs.get('login',None)
         password = kwargs.get('password',None)
 
-        if headerType == Header.ACK and data == '':
-            data = data
-        elif headerType == Header.ERR or headerType == Header.DIS or headerType == Header.MSG:
+        if headerType == Header.ACK or headerType == Header.ERR or headerType == Header.DIS or headerType == Header.MSG:
             data = {'MSG': msg}
         elif headerType == Header.LOG:
             if login != None or password != None:
