@@ -10,12 +10,17 @@ class Header(Enum):
     ACK = 0 #Acknowledment
     ERR = 1 #Any type error
     DIS = 2 #Disconnection
-    MSG = 3 #Message max 512 bytes
+    MSG = 3 #TODO: Message
     LOG = 4 #Login
     SES = 5 #Session
     REG = 6 #Register
     LIS = 7 #List of users
-    FRP = 8 #Forgot password
+    FRP = 8 #TODO: Forgot password
+    HIS = 9 #TODO: Returns a user history
+    UPD = 10 #TODO: Update
+    CHP = 11 #TODO Change password
+    CHM = 12 #TODO Change mail
+    DEL = 13 #TODO Remove account
 
     '''
     | Version  | Type   | Payload Size |

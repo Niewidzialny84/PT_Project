@@ -75,7 +75,7 @@ class UserLogged(User):
         l = []
         for x in r.json()
             l.append(x['username'])
-        h,p = Protocol.encode(Header.LIS, list = l)
+        h,p = Protocol.encode(Header.LIS, users = l)
         self.transfer(h,p)
 
     def handle(self):
