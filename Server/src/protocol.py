@@ -13,8 +13,9 @@ class Header(Enum):
     MSG = 3 #Message max 512 bytes
     LOG = 4 #Login
     SES = 5 #Session
-    REG = 6, #Register
+    REG = 6 #Register
     LIS = 7 #List of users
+    FRP = 8 #Forgot password
 
     '''
     | Version  | Type   | Payload Size |

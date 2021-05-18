@@ -5,7 +5,7 @@ import requests, json
 
 class URL(object):
     local = 'http://127.0.0.1:5000/api/'
-    remote = ''
+    remote = 'http://molly.ovh:5000/api/'
 
 class User(object):
     def __init__(self, conn, addr):
@@ -30,10 +30,10 @@ class User(object):
             r = requests.get(URL.local+'users', params={'username':data['login']})
             j = r.json()
             if r.status_code == 200 and j != {}:
+                #TODO handle password encoding
                 if data['password'] == j['password']:
                     h,p = Protocol.encode(Header.SES, session = self.uuid)
-                    self.socket.send(h)
-                    self.socket.send(p)
+                    self.transfer(h,p)
                     Logger.log('User logged in ('+str(data['login'])+')')
                     return UserLogged(self,j['id'],j['username'])
             
@@ -51,11 +51,17 @@ class User(object):
             else:
                 h,p = Protocol.encode(Header.ERR, msg = 'Invalid register data')
                 Logger.log('User register invalid data ')
+        elif headerType == Header.FRP:
+            #TODO: handle the forgot password function
+            print('lol he forgot password')
         
         if h != None and p != None:
-            self.socket.send(h)
-            self.socket.send(p)
+            self.transfer(h,p)
         return None
+
+    def transfer(h,p):
+        self.socket.send(h)
+        self.socket.send(p)
 
 
 class UserLogged(User):
@@ -64,6 +70,13 @@ class UserLogged(User):
         self.uuid = user.uuid()
         self.dbID = dbID
         self.username = username
+        r = requests.get(URL.local+'users')
+        
+        l = []
+        for x in r.json()
+            l.append(x['username'])
+        h,p = Protocol.encode(Header.LIS, list = l)
+        self.transfer(h,p)
 
     def handle(self):
         return None
