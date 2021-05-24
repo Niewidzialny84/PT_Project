@@ -107,7 +107,7 @@ class UserManager(Resource):
             password_new = None
         
         try:
-            email_new = request.json['password']
+            email_new = request.json['email']
         except Exception as _:
             email_new = None
 
