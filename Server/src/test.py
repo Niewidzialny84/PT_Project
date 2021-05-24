@@ -4,6 +4,8 @@ import threading
 
 from protocol import Header,HeaderParser,Protocol
 
+import time
+
 context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
 context.check_hostname = False
 context.verify_mode=ssl.CERT_NONE

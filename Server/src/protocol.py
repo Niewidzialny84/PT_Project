@@ -7,20 +7,20 @@ class ProtocolVersion(Enum):
 class Header(Enum):
     '''Enum of avaible headers for package with amount of arguments'''
 
-    ACK = 0 #Acknowledment
-    ERR = 1 #Any type error
-    DIS = 2 #Disconnection
-    MSG = 3 #TODO: Message
-    LOG = 4 #Login
-    SES = 5 #Session
-    REG = 6 #Register
-    LIS = 7 #List of users
-    FRP = 8 #TODO: Forgot password
-    HIS = 9 #TODO: Returns a user history
-    UPD = 10 #TODO: Update
-    CHP = 11 #TODO Change password
-    CHM = 12 #TODO Change mail
-    DEL = 13 #TODO Remove account
+    ACK = 0 #Acknowledment !
+    ERR = 1 #Any type error !
+    DIS = 2 #Disconnection !
+    MSG = 3 #TODO: Message !
+    LOG = 4 #Login !
+    SES = 5 #Session !
+    REG = 6 #Register !
+    LIS = 7 #List of users !
+    FRP = 8 #TODO: Forgot password !
+    HIS = 9 #TODO: Returns a user history 
+    UPD = 10 #TODO: Update 
+    CHP = 11 # Change password !
+    CHM = 12 # Change mail !
+    DEL = 13 # Remove account !
 
     '''
     | Version  | Type   | Payload Size |
@@ -71,33 +71,53 @@ class Protocol(object):
         msg = kwargs.get('msg',None)
         login = kwargs.get('login',None)
         password = kwargs.get('password',None)
+        email = kwargs.get('email',None)
 
-        if headerType == Header.ACK or headerType == Header.ERR or headerType == Header.DIS or headerType == Header.MSG:
+        if headerType == Header.ACK or headerType == Header.ERR or headerType == Header.DIS or  headerType == Header.DEL:
             data = {'msg': msg}
         elif headerType == Header.LOG:
             if login != None or password != None:
                 data = {'login': login, 'password': password}
             else:
-                raise TypeError('-login- Missing login or password')
+                raise TypeError('-LOG- Missing login or password')
         elif headerType == Header.REG:
-            email = kwargs.get('email',None)
             if login != None or password != None or email != None:
                 data = {'login': login, 'password': password, 'email':email}
             else:
-                raise TypeError('-register- Missing login or password or email')
+                raise TypeError('-REG- Missing login or password or email')
         elif headerType == Header.SES:
             session = kwargs.get('session',None)
             if session != None:
                 data = {'session': session}
             else:
-                raise TypeError('-session- Missiong session id')
+                raise TypeError('-SES- Missiong session id')
         elif headerType == Header.LIS:
             users = kwargs.get('users', [])
             if users != []:
                 data = {'users': users}
             else:
-                raise TypeError('-list- Missing users list')
-            
+                raise TypeError('-LIS- Missing users list')
+        elif headerType == Header.CHM:
+            if email != None:
+                data = {'email': email}
+            else:
+                raise TypeError('-CHM- Missiong email')
+        elif headerType == Header.CHP:
+            if password != None:
+                data = {'password': password}
+            else:
+                raise TypeError('-CHP- Missiong password')
+        elif headerType == Header.MSG:
+            reciever = kwargs.get('reciever', None)
+            if reciever != None:
+                data = {'msg': msg, 'reciever':reciever}
+            else:
+                raise TypeError('-MSG- Missiong reciver')
+        elif headerType == Header.FRP:
+            if login != None:
+                data = {'login': login}
+            else:
+                raise TypeError('-FRP- Missing login')           
         
         encodedData = json.dumps(data).encode()
         header = HeaderParser.encode(headerType,len(encodedData))
