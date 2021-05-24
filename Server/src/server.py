@@ -27,7 +27,7 @@ class UserContainer(object):
     
     def remove(self, uuid: int):
         for x in self.connections:
-            if x.id == uuid:
+            if x.uuid == uuid:
                 self.remove(x)
                 break
     
@@ -63,7 +63,7 @@ class Server(object):
         while self.running:
             try:
                 c, addr = self.sock.accept()
-                Logger.log('Connection from: '+str(addr))
+                #Logger.log('Connection from: '+str(addr))
 
                 wrap = self.context.wrap_socket(c,server_side=True)
 
@@ -73,19 +73,22 @@ class Server(object):
                 threading.Thread(target=self.userHandler, args=(user,)).start()
 
                 Logger.log('Encrypted connection from:'+str(addr))
-            except socket.error:
+            except socket.error as err:
+                print(err)
                 break
 
     def userHandler(self, user: User):
+        u = user
         while self.running and user.connected:
             try:
-                ret = user.handle()
-                if isinstance(ret, UserLogged):
-                    self.users.replace(user,ret)
-                    user = ret
+                ret = u.handle()
+                #if isinstance(ret, UserLogged):
+                if ret != None:
+                    self.users.replace(u,ret)
+                    u = ret
             except socket.error:
-                self.users.remove(user)                
-                user.quit()
+                self.users.remove(u)                
+                u.quit('User left')
                 break
 
     def stop(self):

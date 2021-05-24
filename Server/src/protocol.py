@@ -73,28 +73,28 @@ class Protocol(object):
         password = kwargs.get('password',None)
 
         if headerType == Header.ACK or headerType == Header.ERR or headerType == Header.DIS or headerType == Header.MSG:
-            data = {'MSG': msg}
+            data = {'msg': msg}
         elif headerType == Header.LOG:
             if login != None or password != None:
-                data = {'LOGIN': login, 'PASSWORD': password}
+                data = {'login': login, 'password': password}
             else:
                 raise TypeError('-login- Missing login or password')
         elif headerType == Header.REG:
             email = kwargs.get('email',None)
             if login != None or password != None or email != None:
-                data = {'LOGIN': login, 'PASSWORD': password, 'EMAIL':email}
+                data = {'login': login, 'password': password, 'email':email}
             else:
                 raise TypeError('-register- Missing login or password or email')
         elif headerType == Header.SES:
             session = kwargs.get('session',None)
             if session != None:
-                data = {'SESSION': session}
+                data = {'session': session}
             else:
                 raise TypeError('-session- Missiong session id')
         elif headerType == Header.LIS:
             users = kwargs.get('users', [])
             if users != []:
-                data = {'USERS': users}
+                data = {'users': users}
             else:
                 raise TypeError('-list- Missing users list')
             
