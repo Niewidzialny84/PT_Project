@@ -1,7 +1,7 @@
 from logger import Logger
 from protocol import Header,HeaderParser,Protocol
 
-import requests, json
+import requests, json, socket
 
 class URL(object):
     local = 'http://127.0.0.1:5000/api/'
@@ -56,7 +56,10 @@ class User(object):
             elif headerType == Header.FRP:
                 #TODO: handle the forgot password function
                 print('lol he forgot password')
-            
+            elif headerType == Header.DIS:
+                self.quit(data['msg'])
+                raise socket.error('Disconnect')
+                
             if h != None and p != None:
                 self.transfer(h,p)
         return None
@@ -81,7 +84,15 @@ class UserLogged(User):
         self.transfer(h,p)
 
     def handle(self):
+        r = self.socket.recv(3)
+        if r != b'':
+            headerType, size = HeaderParser.decode(r)
+            data = Protocol.decode(self.socket.recv(size))
+            h,p = None,None
+
+            if headerType == Header.DIS:
+                self.quit(data['msg'])
+                raise socket.error('Disconnect')
+                
         return None
 
-    def quit(self, message: str):
-        super().quit(message)

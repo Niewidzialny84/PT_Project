@@ -29,13 +29,12 @@ class Client(object):
         self.reciveThread.start()
 
         self._login = 'multiEryk'
-        self.login(self._login,'123c')
+        self.login(self._login,'123')
     
     def loop(self):
         while self.running:
             try:
                 r = self.conn.recv(3)
-                print(r)
                 if r != b'':
                     headerType, size = HeaderParser.decode(r)
                     data = Protocol.decode(self.conn.recv(size))
@@ -61,6 +60,8 @@ class Client(object):
         self.conn.send(p)
     
     def stop(self):
+        h, p = Protocol.encode(Header.DIS, msg='Disconnect')
+        self.transfer(h,p)
         self.running = False
         self.conn.setblocking(False)
         self.conn.close()
