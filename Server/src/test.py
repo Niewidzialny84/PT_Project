@@ -30,7 +30,7 @@ def login(login: str, password: str):
 session = None
 
 _login = 'multiEryk'
-login(_login,'123d')
+login(_login,'123')
     
 headerType, size = HeaderParser.decode(conn.recv(3))
 data = Protocol.decode(conn.recv(size))

@@ -19,7 +19,7 @@ class User(object):
     def quit(self, message: str):
         self.connected = False
         self.socket.close()
-        Logger.log('Client closed from:'+str(self.address))
+        Logger.log('Client closed from:'+str(self.address)+' '+str(message))
 
     def handle(self):
         r = self.socket.recv(3)
@@ -57,8 +57,7 @@ class User(object):
                 #TODO: handle the forgot password function
                 print('lol he forgot password')
             elif headerType == Header.DIS:
-                self.quit(data['msg'])
-                raise socket.error('Disconnect')
+                raise socket.error(data['msg'])
                 
             if h != None and p != None:
                 self.transfer(h,p)
