@@ -1,7 +1,7 @@
 import socket, threading, ssl
 import os
 
-from users import User, UserLogged
+from user import User, UserLogged
 from logger import Logger
 
 class UserContainer(object):

@@ -30,6 +30,8 @@ class Header(Enum):
     Header is 3 bytes long
     '''
 
+
+class HeaderParser(object):
     @staticmethod
     def encode(header: Header, size: int):
         '''Header creator for internal protocol use'''
@@ -98,7 +100,7 @@ class Protocol(object):
             
         
         encodedData = json.dumps(data).encode()
-        header = Header.encode(headerType,len(encodedData))
+        header = HeaderParser.encode(headerType,len(encodedData))
 
         return header,encodedData
 

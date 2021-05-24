@@ -1,5 +1,5 @@
 from logger import Logger
-from protocol import Header,Protocol
+from protocol import Header,HeaderParser,Protocol
 
 import requests, json
 
@@ -22,7 +22,7 @@ class User(object):
         Logger.log('Client closed from:'+str(self.socket.getsockname()))
 
     def handle(self):
-        headerType, size = Header.decode(self.socket.recv(3))
+        headerType, size = HeaderParser.decode(self.socket.recv(3))
         data = Protocol.decode(self.socket.recv(size))
         h,p = None,None
 
@@ -73,7 +73,7 @@ class UserLogged(User):
         r = requests.get(URL.local+'users')
         
         l = []
-        for x in r.json()
+        for x in r.json():
             l.append(x['username'])
         h,p = Protocol.encode(Header.LIS, users = l)
         self.transfer(h,p)

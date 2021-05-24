@@ -1,5 +1,7 @@
 import socket, ssl
 
+from protocol import Header,Protocol
+
 class Client(object):
     def __init__(self):
         super().__init__()
@@ -14,14 +16,16 @@ class Client(object):
 
         self.addr = ('127.0.0.1',7777)
         print('run')
-        self.s = self.context.wrap_socket(self.sock,server_hostname=self.addr[0])
+        self.conn = self.context.wrap_socket(self.sock,server_hostname=self.addr[0])
 
-        self.s.connect(self.addr)
+        self.conn.connect(self.addr)
 
-        self.s.send('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'.encode())
-        print(str(self.s))
 
-        self.s.close()
+        self.conn.close()
+    
+    def login(self, login: str, passwd: str):
+        
+        self.conn.send()
 
 
 Client()
