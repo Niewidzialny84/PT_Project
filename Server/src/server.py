@@ -23,17 +23,20 @@ class UserContainer(object):
 
     def remove(self, user: User):
         self.connections.remove(user)
-        self.UUIDs.remove(user.id)
+        self.UUIDs.remove(user.uuid)
     
-    def remove(self, uuid: int):
+    def removeUser(self, uuid: int):
         for x in self.connections:
             if x.uuid == uuid:
                 self.remove(x)
                 break
     
     def replace(self, a: User, b: User):
-        self.connections.insert(self.connections.index(a),b)
-                
+        self.connections[self.connections.index(a)] = b
+
+    def print(self):
+        for x in self.connections:
+            print(x)               
 
 class Server(object):
     def __init__(self, ip: str, port: int):
@@ -117,6 +120,8 @@ class ConsoleApp(object):
                 self.server.stop()
                 self.thread.join()
                 break
+            elif command == 'LIST':
+                self.server.users.print()
         
         Logger.log('Stopped server')
 

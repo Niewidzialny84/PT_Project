@@ -16,6 +16,9 @@ class User(object):
         self.connected = True
         self.uuid = None
 
+    def __repr__(self):
+        return str(self.address)+' '+str(self.uuid)
+
     def quit(self, message: str):
         self.connected = False
         self.socket.close()
@@ -78,9 +81,13 @@ class UserLogged(User):
         
         l = []
         for x in r.json():
-            l.append(x['username'])
+            if x['username'] != self.username:
+                l.append(x['username'])
         h,p = Protocol.encode(Header.LIS, users = l)
         self.transfer(h,p)
+
+    def __repr__(self):
+        return str(self.address)+' '+str(self.uuid)+' '+self.username
 
     def handle(self):
         r = self.socket.recv(3)
@@ -90,7 +97,6 @@ class UserLogged(User):
             h,p = None,None
 
             if headerType == Header.DIS:
-                self.quit(data['msg'])
                 raise socket.error('Disconnect')
                 
         return None
