@@ -284,7 +284,7 @@ class HistoryManager(Resource):
             else:
                 return make_response(jsonify({'Message': 'CONFLICT'}), 409)
         
-         return make_response(jsonify({'Message': 'BAD_REQUEST'}), 400)
+        return make_response(jsonify({'Message': 'BAD_REQUEST'}), 400)
         
     @staticmethod
     def delete():
