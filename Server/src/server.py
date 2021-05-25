@@ -1,23 +1,8 @@
 import socket, threading, ssl
 import os
 
-from enum import Enum
-
-from users import User
+from user import User, UserLogged
 from logger import Logger
-
-class Header(Enum):
-    '''Enum of avaible headers for package with amount of arguments'''
-
-    ACK = [0,0] #Acknowledment
-    ERR = [1,0] #Any type error
-    DIS = [2,0] #Disconnection
-    MSG = [3,4] #Message max 512 bytes
-    LOG = [4,2] #Login
-    SES = [5,1] #Session
-    REG = [6,4] #Register
-    LIS = [7,1] #List of users
-
 
 class UserContainer(object):
     def __init__(self):
@@ -38,14 +23,20 @@ class UserContainer(object):
 
     def remove(self, user: User):
         self.connections.remove(user)
-        self.UUIDs.remove(user.id)
+        self.UUIDs.remove(user.uuid)
     
-    def remove(self, uuid: int):
+    def removeUser(self, uuid: int):
         for x in self.connections:
-            if x.id == uuid:
+            if x.uuid == uuid:
                 self.remove(x)
                 break
-                
+    
+    def replace(self, a: User, b: User):
+        self.connections[self.connections.index(a)] = b
+
+    def print(self):
+        for x in self.connections:
+            print(x)               
 
 class Server(object):
     def __init__(self, ip: str, port: int):
@@ -75,7 +66,7 @@ class Server(object):
         while self.running:
             try:
                 c, addr = self.sock.accept()
-                Logger.log('Connection from: '+str(addr))
+                #Logger.log('Connection from: '+str(addr))
 
                 wrap = self.context.wrap_socket(c,server_side=True)
 
@@ -85,23 +76,22 @@ class Server(object):
                 threading.Thread(target=self.userHandler, args=(user,)).start()
 
                 Logger.log('Encrypted connection from:'+str(addr))
-            except socket.error:
+            except socket.error as err:
+                print(err)
                 break
 
     def userHandler(self, user: User):
+        u = user
         while self.running and user.connected:
             try:
-                data = user.socket.recv(1024)
-                
-                if data != '':
-                    Logger.log('Recived'+str(data))
-                    if isinstance(user,UserLogged):
-                        print('handle logged')
-                    else:
-                        print('handle unnloged')
+                ret = u.handle()
+                #if isinstance(ret, UserLogged):
+                if ret != None:
+                    self.users.replace(u,ret)
+                    u = ret
             except socket.error:
-                self.users.remove(user)                
-                user.quit()
+                self.users.remove(u)                
+                u.quit('User left')
                 break
 
     def stop(self):
@@ -130,6 +120,8 @@ class ConsoleApp(object):
                 self.server.stop()
                 self.thread.join()
                 break
+            elif command == 'LIST':
+                self.server.users.print()
         
         Logger.log('Stopped server')
 
