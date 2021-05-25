@@ -5,6 +5,7 @@ import time
 
 class Client(object):
     def __init__(self):
+        isConnected = False
 
         context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
         context.check_hostname = False
@@ -18,8 +19,8 @@ class Client(object):
         conn = context.wrap_socket(sock,server_hostname=addr[0])
         try:
             conn.connect(addr)
-            print("OK")
-        except:
-            print("Error") 
+            isConnected = True
+        except Exception as err:
+            print(err)
 
 Client()
