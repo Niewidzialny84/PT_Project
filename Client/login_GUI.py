@@ -46,7 +46,7 @@ class Ui_MainWindow(ABC):
         self.app_Name = QtWidgets.QLabel(self.horizontalLayoutWidget)
         self.app_Name.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.app_Name.setObjectName("app_Name")
-        self.app_Name.setText(" Najfajniejszy Komunikator")
+        self.app_Name.setText(" ")
         self.horizontalLayout_11.addWidget(self.app_Name)
 
         #Left login side
