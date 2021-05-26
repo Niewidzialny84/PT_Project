@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 def login_Check(nick, password,language):
-    nick_pattern = re.compile("^[a-zA-Z0-9]+$")
+    nick_pattern = re.compile("^[a-zA-Z0-9_-\.]+$")
     password_pattern = re.compile("^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])[A-Za-z\d]{8,}$")
     if(nick_pattern.match(nick)):
         if(password_pattern.match(password)):
