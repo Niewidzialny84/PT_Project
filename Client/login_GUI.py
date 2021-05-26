@@ -3,7 +3,7 @@ import sys
 import login_Check
 from abc import ABC, abstractmethod
 
-maxlength = 20
+maxlength = 32
 
 #Ui of the Main Window
 class Ui_MainWindow(ABC):
