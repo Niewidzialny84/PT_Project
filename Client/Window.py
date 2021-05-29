@@ -10,12 +10,36 @@ import client
 class login_Master(login_GUI.Ui_MainWindow):
     def log_into(self):
         #TODO usunąć #
-        #if login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()):
+        if login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()):
             MainWindow.client = client.Client()
             if(MainWindow.client.is_Connected == True):
-                MainWindow.client.login('multiEryk','123')
+                MainWindow.client.login(self.nick_Text.text(),self.password_Text.text())
                 if(True):
-                    MainWindow.client.receive()
+                    login_to_main()
+                else:
+                    pass
+            else:
+                MainWindow.client = None
+                if(self.language_Button.text()=="English"):
+                    message = QtWidgets.QMessageBox()
+                    message.setWindowTitle("Error")
+                    message.setIcon(QtWidgets.QMessageBox.Critical)
+                    message.setText("No connection with the server!")
+                    message.exec_()
+                else:
+                    message = QtWidgets.QMessageBox()
+                    message.setWindowTitle("Błąd")
+                    message.setIcon(QtWidgets.QMessageBox.Critical)
+                    message.setText("Brak połączenia z serwerem!")
+                    message.exec_()
+
+    def register_into(self):
+        if login_Check.register_Check(self.nick_Register_Text.text(),self.password_Register_Text.text(),self.confirm_Password_Register_Text.text(),self.mail_Text.text(),self.language_Button.text()):
+            MainWindow.client = client.Client()
+            if(MainWindow.client.is_Connected == True):
+                MainWindow.client.register(self.nick_Register_Text.text(),self.password_Register_Text.text(),self.mail_Text.text())
+                MainWindow.client.login(self.nick_Register_Text.text(),self.password_Register_Text.text())
+                if(True):
                     login_to_main()
                 else:
                     pass
@@ -97,7 +121,7 @@ class Window(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         if self.client != None:
-            self.client.kill()
+            self.client.stop()
         event.accept()
 
 def login_to_main():
@@ -106,7 +130,7 @@ def login_to_main():
 
 def change_to_login(message):
     if MainWindow.client != None:
-        MainWindow.client.kill()
+        MainWindow.client.stop()
         MainWindow.client = None
     login_ui.setupUi(MainWindow)
     MainWindow.show()

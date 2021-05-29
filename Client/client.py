@@ -6,6 +6,7 @@ import time
 class Client(object):
     def __init__(self):
         self.is_Connected = False
+        self.session = None
 
         self.context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
         self.context.check_hostname = False
@@ -20,33 +21,52 @@ class Client(object):
         try:
             self.conn.connect(self.addr)
             self.is_Connected = True
+
+            if self.is_Connected:
+                self.reciveThread = threading.Thread(target=self.receive)
+                self.reciveThread.start()
             
         except Exception as err:
             print(err)
+        
 
     def transfer(self,h,p):
-        self.conn.send(h)
-        self.conn.send(p)
+        try:
+            self.conn.send(h)
+            self.conn.send(p)
+        except socket.error as ex:
+            print(ex)
 
     def login(self,login: str, password: str): 
         h, p = Protocol.encode(Header.LOG,login=login,password=password)
         self.transfer(h,p)
 
+    def register(self,login: str, password: str, email: str):
+        h, p = Protocol.encode(Header.REG,login=login,password=password,email=email)
+        self.transfer(h,p)
+
     def receive(self):
-        self.headerType, self.size = HeaderParser.decode(self.conn.recv(3))
-        self.data = Protocol.decode(self.conn.recv(self.size))
+        while self.is_Connected:
+            try:
+                r = self.conn.recv(3)
+                if r != b'':
+                    headerType, size = HeaderParser.decode(r)
+                    data = Protocol.decode(self.conn.recv(size))
 
-        if self.headerType == Header.SES:
-            session = self.data['session']
-            print(session)
+                    if headerType == Header.SES:
+                        self.session = data['session']
+                        print(self.session)
+                    elif headerType == Header.LIS:
+                        print(data['users'])
+                    elif headerType == Header.ERR:
+                        print(data['msg'])
 
-            self.headerType, self.size = HeaderParser.decode(self.conn.recv(3))
-            self.data = Protocol.decode(self.conn.recv(self.size))
-            print(self.data['users'])
-        elif self.headerType == Header.ERR:
-            print(self.data['msg'])
+            except socket.error as ex:
+                    print(ex)
 
-    def kill(self):
+    def stop(self):
         h, p = Protocol.encode(Header.DIS, msg='Disconnect')
         self.transfer(h,p)
+        self.is_Connected = False
         self.conn.close()
+        self.reciveThread.join()
