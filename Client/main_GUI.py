@@ -245,6 +245,7 @@ class Ui_OptionWindow(object):
         OptionsWindow.setObjectName("OptionsWindow")
         OptionsWindow.setFixedSize(270, 287)
         OptionsWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        #OptionsWindow.setStyleSheet('QMainWindow {background-color: #e4e3e3;} QMessageBox {background-color: #e4e3e3;color: #204051;} QListWidget::item:selected { background-color: #e4e3e3; color: #204051; } QLabel { color: #204051; } QLineEdit {background-color: #84a9ac; border: 1px solid #3b6978} QPushButton {background-color: #84a9ac;color: #204051;border: 1px solid #3b6978; min-height:20px;min-width:50px}')
         self.centralwidget = QtWidgets.QWidget(OptionsWindow)
         self.centralwidget.setObjectName("centralwidget")
 
@@ -374,7 +375,7 @@ class Options_Window(QtWidgets.QMainWindow):
     close_signal = QtCore.pyqtSignal()
     change_language_signal = QtCore.pyqtSignal()
     delete_signal = QtCore.pyqtSignal()
-
+    
     def setup(self):
         self.options_ui = Ui_OptionWindow()
         self.options_ui.setupUi(self)

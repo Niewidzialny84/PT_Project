@@ -39,7 +39,7 @@ def login_Check(nick, password,language):
 
 
 def forgot_Check(nick, language):
-    nick_pattern = re.compile("^[a-zA-Z0-9]+$")
+    nick_pattern = re.compile("^[a-zA-Z0-9_-\.]+$")
     if(nick_pattern.match(nick)):
         return True
     else:
@@ -58,7 +58,7 @@ def forgot_Check(nick, language):
     return False
 
 def register_Check(nick, password, confirm, mail, language):
-    nick_pattern = re.compile("^[a-zA-Z0-9]+$")
+    nick_pattern = re.compile("^[a-zA-Z0-9_-\.]+$")
     password_pattern = re.compile("^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])[A-Za-z\d]{8,}$")
     mail_pattern = re.compile("^.+@.+\..+$")
     if(nick_pattern.match(nick)):
