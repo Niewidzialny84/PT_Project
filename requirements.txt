@@ -5,3 +5,4 @@ flask-restful==0.3.8
 sqlalchemy==1.4.11
 marshmallow==3.11.1
 datetime==4.3
+pyqt5==12.8.3
