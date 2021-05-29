@@ -16,6 +16,7 @@ class Ui_MainWindow(ABC):
         MainWindow.resize(450, 180)
         MainWindow.setFixedSize(450, 180)
         MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.client_ref = MainWindow.client
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         font = QtGui.QFont()
         font.setFamily("Calibri")
@@ -107,7 +108,7 @@ class Ui_MainWindow(ABC):
         self.mail_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.mail_Text.setObjectName("mail_Text")
         self.mail_Text.setPlaceholderText("User Email")
-        self.mail_Text.setMaxLength(256)
+        self.mail_Text.setMaxLength(64)
         self.verticalLayout_4.addWidget(self.mail_Text)
         #Register button
         self.register_Button = QtWidgets.QPushButton(self.verticalLayoutWidget_2)

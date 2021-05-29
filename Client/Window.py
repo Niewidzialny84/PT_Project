@@ -3,6 +3,7 @@ import sys, time
 import login_GUI
 import main_GUI
 import login_Check
+import client
 
 #TODO true communication with server!!!
 
@@ -10,7 +11,27 @@ class login_Master(login_GUI.Ui_MainWindow):
     def log_into(self):
         #TODO usunąć #
         #if login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()):
-            login_to_main()
+            MainWindow.client = client.Client()
+            if(MainWindow.client.is_Connected == True):
+                MainWindow.client.login('multiEryk','123')
+                if(True):
+                    MainWindow.client.receive()
+                    login_to_main()
+                else:
+                    pass
+            else:
+                if(self.language_Button.text()=="English"):
+                    message = QtWidgets.QMessageBox()
+                    message.setWindowTitle("Error")
+                    message.setIcon(QtWidgets.QMessageBox.Critical)
+                    message.setText("No connection with the server!")
+                    message.exec_()
+                else:
+                    message = QtWidgets.QMessageBox()
+                    message.setWindowTitle("Błąd")
+                    message.setIcon(QtWidgets.QMessageBox.Critical)
+                    message.setText("Brak połączenia z serwerem!")
+                    message.exec_()
 
 class main_Master(main_GUI.Ui_MainWindow):
     def logout(self):
@@ -54,6 +75,8 @@ class main_Master(main_GUI.Ui_MainWindow):
             message.exec_()
 
 class Window(QtWidgets.QMainWindow):
+
+    client = None
 
     def mousePressEvent(self, QMouseEvent):
         if QMouseEvent.button()==QtCore.Qt.LeftButton:
