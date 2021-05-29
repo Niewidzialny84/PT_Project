@@ -45,3 +45,8 @@ class Client(object):
             print(self.data['users'])
         elif self.headerType == Header.ERR:
             print(self.data['msg'])
+
+    def kill(self):
+        h, p = Protocol.encode(Header.DIS, msg='Disconnect')
+        self.transfer(h,p)
+        self.conn.close()

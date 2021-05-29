@@ -20,6 +20,7 @@ class login_Master(login_GUI.Ui_MainWindow):
                 else:
                     pass
             else:
+                MainWindow.client = None
                 if(self.language_Button.text()=="English"):
                     message = QtWidgets.QMessageBox()
                     message.setWindowTitle("Error")
@@ -94,11 +95,19 @@ class Window(QtWidgets.QMainWindow):
         self.m_flag=False
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
 
+    def closeEvent(self, event):
+        if self.client != None:
+            self.client.kill()
+        event.accept()
+
 def login_to_main():
     main_ui.setupUi(MainWindow,login_ui.language_Button.text(),login_ui.nick_Text.text())
     MainWindow.show()
 
 def change_to_login(message):
+    if MainWindow.client != None:
+        MainWindow.client.kill()
+        MainWindow.client = None
     login_ui.setupUi(MainWindow)
     MainWindow.show()
     message.close()
