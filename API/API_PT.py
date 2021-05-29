@@ -5,6 +5,7 @@ from flask_restful import Resource, Api
 from sqlalchemy.orm import validates, Session
 from marshmallow import fields, validate
 from datetime import datetime
+from sqlalchemy.sql import func
 
 
 app = Flask(__name__) 
@@ -107,7 +108,7 @@ class UserManager(Resource):
             password_new = None
         
         try:
-            email_new = request.json['password']
+            email_new = request.json['email']
         except Exception as _:
             email_new = None
 
@@ -180,7 +181,7 @@ class HistoryContent(db.Model):
     db.Column('history_id', db.Integer, db.ForeignKey('history.id')),
     db.Column('username', db.String(64), db.ForeignKey('user.username')),
     db.Column('content', db.Text),
-    db.Column('date', db.DateTime, nullable=False, default=datetime.utcnow))
+    db.Column('date', db.DateTime, nullable=False, default=func.now()))
 
     def __init__(self, history_id, username, content):
         self.history_id = history_id
