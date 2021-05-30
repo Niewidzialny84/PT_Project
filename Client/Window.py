@@ -102,6 +102,7 @@ class main_Master(main_GUI.Ui_MainWindow):
 class Window(QtWidgets.QMainWindow):
 
     client = None
+    m_flag=False
 
     def mousePressEvent(self, QMouseEvent):
         if QMouseEvent.button()==QtCore.Qt.LeftButton:
