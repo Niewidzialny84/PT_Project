@@ -128,7 +128,7 @@ class Ui_MainWindow(ABC):
         self.register_Button.setObjectName("register_Button")
         self.register_Button.setText("Register")
         self.verticalLayout_4.addWidget(self.register_Button)
-        self.register_Button.clicked.connect(lambda:login_Check.register_Check(self.nick_Register_Text.text(),self.password_Register_Text.text(),self.confirm_Password_Register_Text.text(),self.mail_Text.text(),self.language_Button.text()))
+        self.register_Button.clicked.connect(lambda:self.register_into())
         self.register_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Forgot password Button
@@ -169,6 +169,10 @@ class Ui_MainWindow(ABC):
 
     @abstractmethod
     def log_into(self):
+        pass
+
+    @abstractmethod
+    def register_into(self):
         pass
 
     def change_Language(self):
