@@ -114,12 +114,12 @@ QListView
     margin-top: 5px;
     color: #fff;
     border: 2px solid #fff;
-    border-radius: 8px;
-    selection-background-color: #fff;
+    border-radius: 4px;
+    selection-background-color: #00DEA1;
     selection-color: #000;
     background-color: #000;
+    show-decoration-selected: 1; 
     outline: none;
-    cursor: pointer;
 }
 '''
 
