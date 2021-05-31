@@ -126,6 +126,7 @@ QListView
 main_window_style = '''QMainWindow
 {
 	background: #000;
+    color: #fff;
 }
 QPushButton
 {
@@ -136,7 +137,9 @@ QPushButton
 	border: 2px solid;
 	outline: none;
     letter-spacing: 1px;
-    height: 23px;
+    height: 25px;
+    margin: -2px 0px -2px 0px;
+    padding: 0px;
 }
 QPushButton:hover
 {
@@ -161,19 +164,19 @@ QPushButton#quit_Button:hover
 }
 QLineEdit
 {
+    color: white;
     border-top-style: hidden;
     border-right-style: hidden;
     border-left-style: hidden;
     border-bottom-style: groove;
     background-color: #000;
-    color: #fff;
     padding-left: 5px;
     border-bottom: 1px solid;
     border-color: #fff;
 }
-QLineEdit::PlaceholderText
+QLineEdit:focus
 {
-    color: #4d4d4d;
+    color: white;
 }
 QLabel
 {
@@ -300,6 +303,16 @@ QScrollBar::down-arrow:vertical:pressed
 {
     border-left: 5px solid #00b383;
     border-right: 5px solid #00b383;
+}
+QScrollBar::up-arrow:vertical:hover 
+{	
+    border-left: 5px solid #00dea1;
+    border-right: 5px solid #00dea1;
+}
+QScrollBar::down-arrow:vertical:hover 
+{	
+    border-left: 5px solid #00dea1;
+    border-right: 5px solid #00dea1;
 }
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical 
 {
