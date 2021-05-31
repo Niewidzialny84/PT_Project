@@ -6,6 +6,9 @@ import login_Check
 maxlength = 32
 
 class Ui_MainWindow(ABC):
+
+    names = ('')
+
     def setupUi(self, MainWindow, language, username):
 
         self.language = language
@@ -19,9 +22,8 @@ class Ui_MainWindow(ABC):
         self.OptionsWindow.delete_signal.connect(lambda:self.delete_Account())
 
         #Test Users
-        names = ('Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka')
-        self.model = QtGui.QStandardItemModel(len(names), 1)
-        for row, name in enumerate(names):
+        self.model = QtGui.QStandardItemModel(len(self.names), 1)
+        for row, name in enumerate(self.names):
             item = QtGui.QStandardItem(name)
             self.model.setItem(row, 0, item)
         self.search_filter = QtCore.QSortFilterProxyModel()

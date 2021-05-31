@@ -22,9 +22,9 @@ class Client(object):
             self.conn.connect(self.addr)
             self.is_Connected = True
 
-            if self.is_Connected:
-                self.reciveThread = threading.Thread(target=self.receive)
-                self.reciveThread.start()
+            #if self.is_Connected:
+            #    self.reciveThread = threading.Thread(target=self.receive)
+            #    self.reciveThread.start()
             
         except Exception as err:
             print(err)
@@ -45,28 +45,30 @@ class Client(object):
         h, p = Protocol.encode(Header.REG,login=login,password=password,email=email)
         self.transfer(h,p)
 
+    """
     def receive(self):
-        while self.is_Connected:
-            try:
-                r = self.conn.recv(3)
-                if r != b'':
-                    headerType, size = HeaderParser.decode(r)
-                    data = Protocol.decode(self.conn.recv(size))
+        try:
+            r = self.conn.recv(3)
+            if r != b'':
+                headerType, size = HeaderParser.decode(r)
+                data = Protocol.decode(self.conn.recv(size))
 
-                    if headerType == Header.SES:
-                        self.session = data['session']
-                        print(self.session)
-                    elif headerType == Header.LIS:
-                        print(data['users'])
-                    elif headerType == Header.ERR:
-                        print(data['msg'])
+                if headerType == Header.SES:
+                    self.session = data['session']
+                    return str(data['session'])
+                elif headerType == Header.LIS:
+                    return data['users']
+                elif headerType == Header.ERR:
+                    return data['msg']
 
-            except socket.error as ex:
-                    print(ex)
+        except socket.error as ex:
+                print(ex)
+                return ex
+    """
 
     def stop(self):
         h, p = Protocol.encode(Header.DIS, msg='Disconnect')
         self.transfer(h,p)
         self.is_Connected = False
         self.conn.close()
-        self.reciveThread.join()
+        #self.reciveThread.join()
