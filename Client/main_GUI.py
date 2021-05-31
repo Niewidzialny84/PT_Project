@@ -34,24 +34,26 @@ class Ui_MainWindow(ABC):
 
         #Main settings of the widget
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(974, 617)
-        MainWindow.setFixedSize(974, 617)
+        MainWindow.resize(984, 632)
+        MainWindow.setFixedSize(984, 632)
         MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
         #Top bar with buttons and name
         self.quit_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.quit_Button.setGeometry(QtCore.QRect(934, 0, 41, 31))
+        self.quit_Button.setGeometry(QtCore.QRect(944, 0, 41, 31))
         self.quit_Button.setObjectName("quit_Button")
         self.quit_Button.setText("X")
         self.quit_Button.clicked.connect(lambda:MainWindow.close())
+        self.quit_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         #
         self.minimize_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.minimize_Button.setGeometry(QtCore.QRect(894, 0, 41, 31))
+        self.minimize_Button.setGeometry(QtCore.QRect(904, 0, 41, 31))
         self.minimize_Button.setObjectName("minimize_Button")
         self.minimize_Button.setText("_")
         self.minimize_Button.clicked.connect(lambda:MainWindow.showMinimized())
+        self.minimize_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         self.app_Name = QtWidgets.QLabel(self.centralwidget)
         self.app_Name.setGeometry(QtCore.QRect(0, 10, 161, 16))
@@ -117,7 +119,7 @@ class Ui_MainWindow(ABC):
         self.event.event_signal.connect(lambda:self.handle_send())
         #Show how many characters you have used
         self.chat_Limit = QtWidgets.QLabel(self.centralwidget)
-        self.chat_Limit.setGeometry(QtCore.QRect(738, 595, 51, 15))
+        self.chat_Limit.setGeometry(QtCore.QRect(728, 615, 61, 15))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.chat_Limit.setFont(font)
@@ -154,7 +156,8 @@ class Ui_MainWindow(ABC):
         self.options_Button.setGeometry(QtCore.QRect(810, 580, 75, 31))
         self.options_Button.setObjectName("language_Button")
         self.options_Button.setText("Settings")
-        self.options_Button.clicked.connect(lambda:self.open_Options(MainWindow))#self.change_Language)
+        self.options_Button.clicked.connect(lambda:self.open_Options(MainWindow))
+        self.options_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Logout Button
         self.logout_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -162,6 +165,8 @@ class Ui_MainWindow(ABC):
         self.logout_Button.setObjectName("logout_Button")
         self.logout_Button.setText("Logout")
         self.logout_Button.clicked.connect(self.logout)
+        self.logout_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
 
         #Start change language
         self.change_Language()
@@ -262,12 +267,14 @@ class Ui_OptionWindow(object):
         self.quit_Button.setObjectName("quit_Button")
         self.quit_Button.setText("X")
         self.quit_Button.clicked.connect(lambda:OptionsWindow.close())
+        self.quit_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         #
         self.minimize_Button = QtWidgets.QPushButton(self.centralwidget)
         self.minimize_Button.setGeometry(QtCore.QRect(190, 0, 41, 31))
         self.minimize_Button.setObjectName("minimize_Button")
         self.minimize_Button.setText("_")
         self.minimize_Button.clicked.connect(lambda:OptionsWindow.showMinimized())
+        self.minimize_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         self.app_Name = QtWidgets.QLabel(self.centralwidget)
         self.app_Name.setGeometry(QtCore.QRect(0, 10, 161, 16))
@@ -284,6 +291,7 @@ class Ui_OptionWindow(object):
         self.language_Box.addItem("English")
         self.language_Box.addItem("Polski")
         self.language_Box.currentIndexChanged.connect(lambda:self.send_Change_Language(OptionsWindow))
+        self.language_Box.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Field to enter new password
         self.password_Edit = QtWidgets.QLineEdit(self.centralwidget)
@@ -298,6 +306,7 @@ class Ui_OptionWindow(object):
         self.password_Button.setObjectName("password_Button")
         self.password_Button.setText("Change Password")
         self.password_Button.pressed.connect(lambda:self.update_Password())
+        self.password_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Field to enter mail
         self.mail_Edit = QtWidgets.QLineEdit(self.centralwidget)
@@ -312,6 +321,7 @@ class Ui_OptionWindow(object):
         self.mail_Button.setObjectName("mail_Button")
         self.mail_Button.setText("Change Mail")
         self.mail_Button.pressed.connect(lambda:self.update_Mail())
+        self.mail_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Delete account button
         self.delete_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -319,6 +329,7 @@ class Ui_OptionWindow(object):
         self.delete_Button.setObjectName("delete_Button")
         self.delete_Button.setText("Delete Account")
         self.delete_Button.pressed.connect(lambda:OptionsWindow.delete_signal.emit())
+        self.delete_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Button to go back
         self.back_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -326,6 +337,7 @@ class Ui_OptionWindow(object):
         self.back_Button.setObjectName("back_Button")
         self.back_Button.setText("Back")
         self.back_Button.pressed.connect(lambda:self.open_Main(OptionsWindow))
+        self.back_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #All the seperator lines
         self.line = QtWidgets.QFrame(self.centralwidget)

@@ -196,7 +196,7 @@ QTextEdit
 }
 QTextEdit#chat_Enter_Field
 {
-    background-color: #8c8c8c;
+    background-color: #cccccc;
 }
 QTextEdit#chat_Field
 {
@@ -219,7 +219,19 @@ QListView
     border-color: #fff;
     radius: 8px;
     background-color: #4d4d4d;
-    padding-left: 2px;
+    padding: 0px 2px 0px 2px;
+}
+QListView:item:selected:active
+{
+    background-color: #00DEA1;
+    color: black;
+    border-radius: 8px;
+}
+QListView:item:hover
+{
+    background-color: #cccccc;
+    color: black;
+    border-radius: 8px;
 }
 QScrollBar:vertical 
 {
