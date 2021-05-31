@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import login_Check
 from abc import ABC, abstractmethod
+from stylesheet import *
 
 maxlength = 32
 
@@ -23,6 +24,12 @@ class Ui_MainWindow(ABC):
         font.setPointSize(10)
         self.centralwidget.setFont(font)
         self.centralwidget.setObjectName("centralwidget")
+
+        # MainWindow.setStyleSheet(main_window_style)
+
+        #Color palette for input fields
+        palette = QtGui.QPalette()
+        palette.setColor(QtGui.QPalette.PlaceholderText, QtGui.QColor("#737373"))
 
         #Quit Button
         self.quit_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -63,6 +70,12 @@ class Ui_MainWindow(ABC):
         self.nick_Text.setPlaceholderText("Username")
         self.nick_Text.setMaxLength(maxlength)
         self.verticalLayout_3.addWidget(self.nick_Text)
+
+        # palette = self.nick_Text.palette()
+        # palette.setColor(QtGui.QPalette.PlaceholderText, QtGui.QColor("#737373"))
+        self.nick_Text.setPalette(palette)
+        self.nick_Text.setFont(font)
+        
         #Password entry
         self.password_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget)
         self.password_Text.setObjectName("password_Text")
@@ -70,6 +83,9 @@ class Ui_MainWindow(ABC):
         self.password_Text.setEchoMode(QtWidgets.QLineEdit.Password)
         self.password_Text.setMaxLength(maxlength)
         self.verticalLayout_3.addWidget(self.password_Text)
+        self.password_Text.setPalette(palette)
+        self.password_Text.setFont(font)
+        
         #Login button
         self.login_Button = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.login_Button.setObjectName("login_Button")
@@ -90,6 +106,9 @@ class Ui_MainWindow(ABC):
         self.nick_Register_Text.setPlaceholderText("Username")
         self.nick_Register_Text.setMaxLength(maxlength)
         self.verticalLayout_4.addWidget(self.nick_Register_Text)
+        self.nick_Register_Text.setPalette(palette)
+        self.nick_Register_Text.setFont(font)
+        
         #Password entry
         self.password_Register_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.password_Register_Text.setObjectName("password_Register_Text")
@@ -97,6 +116,9 @@ class Ui_MainWindow(ABC):
         self.password_Register_Text.setEchoMode(QtWidgets.QLineEdit.Password)
         self.password_Register_Text.setMaxLength(maxlength)
         self.verticalLayout_4.addWidget(self.password_Register_Text)
+        self.password_Register_Text.setPalette(palette)
+        self.password_Register_Text.setFont(font)
+
         #Confirm entry
         self.confirm_Password_Register_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.confirm_Password_Register_Text.setObjectName("confirm_Password_Register_Text")
@@ -104,12 +126,18 @@ class Ui_MainWindow(ABC):
         self.confirm_Password_Register_Text.setEchoMode(QtWidgets.QLineEdit.Password)
         self.confirm_Password_Register_Text.setMaxLength(maxlength)
         self.verticalLayout_4.addWidget(self.confirm_Password_Register_Text)
+        self.confirm_Password_Register_Text.setPalette(palette)
+        self.confirm_Password_Register_Text.setFont(font)
+
         #Mail entry
         self.mail_Text = QtWidgets.QLineEdit(self.verticalLayoutWidget_2)
         self.mail_Text.setObjectName("mail_Text")
         self.mail_Text.setPlaceholderText("User Email")
         self.mail_Text.setMaxLength(64)
         self.verticalLayout_4.addWidget(self.mail_Text)
+        self.mail_Text.setPalette(palette)
+        self.mail_Text.setFont(font)
+
         #Register button
         self.register_Button = QtWidgets.QPushButton(self.verticalLayoutWidget_2)
         self.register_Button.setObjectName("register_Button")
@@ -118,15 +146,24 @@ class Ui_MainWindow(ABC):
         self.register_Button.clicked.connect(lambda:self.register_into())
 
         #Forgot password Button
-        self.forgot_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.forgot_Button.setGeometry(QtCore.QRect(10, 120, 201, 23))
+        self.forgot_Button = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        # self.forgot_Button.setGeometry(QtCore.QRect(10, 120, 201, 25))
         self.forgot_Button.setObjectName("forgot_Button")
         self.forgot_Button.setText("Forgot Password")
         self.forgot_Button.clicked.connect(lambda:login_Check.forgot_Check(self.nick_Text.text(),self.language_Button.text()))
 
+         # Left Line
+        self.left_Line = QtWidgets.QFrame(self.verticalLayoutWidget)
+        # self.left_Line.setGeometry(QtCore.QRect(10, 138, 201, 5))
+        self.left_Line.setFixedHeight(2)
+        self.left_Line.setFrameShape(QtWidgets.QFrame.HLine)
+        # self.left_Line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.left_Line.setObjectName("left_Line")
+        self.verticalLayout_3.addWidget(self.left_Line)
+
         #Language Button
-        self.language_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.language_Button.setGeometry(QtCore.QRect(10, 148, 201, 23))
+        self.language_Button = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        # self.language_Button.setGeometry(QtCore.QRect(10, 148, 201, 25))
         self.language_Button.setObjectName("language_Button")
         self.language_Button.setText("Polski")
         self.language_Button.clicked.connect(lambda:self.change_Language())
@@ -138,12 +175,13 @@ class Ui_MainWindow(ABC):
         self.middle_Line.setFrameShape(QtWidgets.QFrame.VLine)
         self.middle_Line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.middle_Line.setObjectName("middle_Line")
-        # Left Line
-        self.left_Line = QtWidgets.QFrame(self.centralwidget)
-        self.left_Line.setGeometry(QtCore.QRect(10, 138, 201, 16))
-        self.left_Line.setFrameShape(QtWidgets.QFrame.HLine)
-        self.left_Line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.left_Line.setObjectName("left_Line")
+        # # Left Line
+        # self.left_Line = QtWidgets.QFrame(self.verticalLayoutWidget)
+        # self.left_Line.setGeometry(QtCore.QRect(10, 138, 201, 16))
+        # self.left_Line.setFrameShape(QtWidgets.QFrame.HLine)
+        # # self.left_Line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        # self.left_Line.setObjectName("left_Line")
+        # self.verticalLayout_3.addWidget(self.left_Line)
 
         MainWindow.setCentralWidget(self.centralwidget)
 

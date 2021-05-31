@@ -4,6 +4,7 @@ import login_GUI
 import main_GUI
 import login_Check
 import client
+from stylesheet import *
 from protocol import Header,HeaderParser,Protocol
 
 #TODO true communication with server!!!
@@ -255,6 +256,7 @@ def change_to_login(message):
         MainWindow.client.stop()
         MainWindow.client = None
     login_ui.setupUi(MainWindow)
+    # MainWindow.setStyleSheet(main_window_style)
     MainWindow.listen_thread.join()
     MainWindow.show()
     message.close()
@@ -272,5 +274,6 @@ login_ui.signal_setup()
 main_ui = main_Master()
 main_ui.signal_setup()
 login_ui.setupUi(MainWindow)
+MainWindow.setStyleSheet(main_window_style)
 MainWindow.show()
 app.exec_()
