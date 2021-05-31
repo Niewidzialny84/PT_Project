@@ -150,7 +150,7 @@ class main_Master(main_GUI.Ui_MainWindow):
             message.setIcon(QtWidgets.QMessageBox.Question)
             message.setText("Are you sure you want to delete this account?")
             ok = message.addButton("Yes", QtWidgets.QMessageBox.YesRole)
-            ok.pressed.connect(lambda:delete_Account(self.OptionsWindow,message))
+            ok.pressed.connect(lambda:self.delete_account_handle(message))
             message.addButton("No", QtWidgets.QMessageBox.NoRole)
             message.exec_()
         else:
@@ -159,15 +159,80 @@ class main_Master(main_GUI.Ui_MainWindow):
             message.setIcon(QtWidgets.QMessageBox.Question)
             message.setText("Czy na pewno chcesz usunąć to konto?")
             ok = message.addButton("Tak", QtWidgets.QMessageBox.YesRole)
-            ok.pressed.connect(lambda:delete_Account(self.OptionsWindow,message))
+            ok.pressed.connect(lambda:self.delete_account_handle(message))
             message.addButton("Nie", QtWidgets.QMessageBox.NoRole)
             message.exec_()
 
     def handle_ack(self, message):
-        pass
+        if(message == 'Change password succesfull'):
+            if(self.language=="English"):
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Success")
+                message.setIcon(QtWidgets.QMessageBox.Information)
+                message.setText("Successfully changed password!")
+                message.exec_()
+            else:
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Powodzenie")
+                message.setIcon(QtWidgets.QMessageBox.Information)
+                message.setText("Powiodła się zmiana hasła!")
+                message.exec_()
+        elif(message == 'Change mail succesfull'):
+            if(self.language=="English"):
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Success")
+                message.setIcon(QtWidgets.QMessageBox.Information)
+                message.setText("Successfully changed email!")
+                message.exec_()
+            else:
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Powodzenie")
+                message.setIcon(QtWidgets.QMessageBox.Information)
+                message.setText("Powiodła się zmiana E-Maila!")
+                message.exec_()
+        elif(message == 'Deletion succesfull'):
+            delete_Account(self.OptionsWindow)
 
-    def handle_error(self, message):
-        pass
+    def handle_error(self, err):
+        if(err == 'Change password failed'):
+            if(self.language=="English"):
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Error")
+                message.setIcon(QtWidgets.QMessageBox.Critical)
+                message.setText("Some error occured. Cannot change password!")
+                message.exec_()
+            else:
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Błąd")
+                message.setIcon(QtWidgets.QMessageBox.Critical)
+                message.setText("Wystąpił błąd. Nie można zmienić hasła!")
+                message.exec_()
+        elif(err == 'Change mail failed'):
+            if(self.language=="English"):
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Error")
+                message.setIcon(QtWidgets.QMessageBox.Critical)
+                message.setText("Some error occured. Cannot change mail!")
+                message.exec_()
+            else:
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Błąd")
+                message.setIcon(QtWidgets.QMessageBox.Critical)
+                message.setText("Wystąpił błąd. Nie można zmienić E-Maila!")
+                message.exec_()
+        elif(err == 'Deletion failed'):
+            if(self.language=="English"):
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Error")
+                message.setIcon(QtWidgets.QMessageBox.Critical)
+                message.setText("Some error occured. Cannot delete account!")
+                message.exec_()
+            else:
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Błąd")
+                message.setIcon(QtWidgets.QMessageBox.Critical)
+                message.setText("Wystąpił błąd. Nie można usunąć konta!")
+                message.exec_()
 
     def user_list_update(self, users):
         self.names = users
@@ -177,6 +242,18 @@ class main_Master(main_GUI.Ui_MainWindow):
             self.model.setItem(row, 0, item)
         self.search_filter.setSourceModel(self.model)
         self.search_Results.setModel(self.search_filter)
+
+    def change_mail(self,text):
+        if login_Check.mail_New_Check(text,self.language):
+            MainWindow.client.mail(text)
+
+    def change_password(self,text):
+        if login_Check.password_New_Check(text,self.language):
+            MainWindow.client.password(text)
+
+    def delete_account_handle(self,messagebox):
+        MainWindow.client.delete()
+        messagebox.close()
 
 
 
@@ -251,7 +328,7 @@ def login_to_main():
     main_ui.setupUi(MainWindow,login_ui.language_Button.text(),login_ui.nick_Text.text())
     MainWindow.show()
 
-def change_to_login(message):
+def change_to_login(message=None):
     if MainWindow.client != None:
         MainWindow.client.stop()
         MainWindow.client = None
@@ -259,13 +336,17 @@ def change_to_login(message):
     # MainWindow.setStyleSheet(main_window_style)
     MainWindow.listen_thread.join()
     MainWindow.show()
-    message.close()
+    if(message!= None):
+        message.close()
 
-def delete_Account(OptionsWindow,message):
+def delete_Account(OptionsWindow,message=None):
     OptionsWindow.active = False
     OptionsWindow.hide_signal.emit()
     OptionsWindow.hide()
-    change_to_login(message)
+    if(message!= None):
+        change_to_login(message)
+    else:
+        change_to_login()
 
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = Window()

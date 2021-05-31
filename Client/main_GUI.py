@@ -22,7 +22,9 @@ class Ui_MainWindow(ABC):
         self.OptionsWindow.close_signal.connect(lambda:MainWindow.close())
         self.OptionsWindow.hide_signal.connect(lambda:MainWindow.show())
         self.OptionsWindow.change_language_signal.connect(lambda:self.change_Language())
-        self.OptionsWindow.delete_signal.connect(lambda:self.delete_Account())
+        self.OptionsWindow.delete_signal.connect(self.delete_Account)
+        self.OptionsWindow.change_mail_signal.connect(self.change_mail)
+        self.OptionsWindow.change_password_signal.connect(self.change_password)
 
         #Test Users
         self.model = QtGui.QStandardItemModel(len(self.names), 1)
@@ -224,6 +226,14 @@ class Ui_MainWindow(ABC):
     def delete_Account(self):
         pass
 
+    @abstractmethod
+    def change_mail(self,text):
+        pass
+
+    @abstractmethod
+    def change_password(self,text):
+        pass
+
 #TODO this has to load the chat once it's there
     def select_conversation(self, item):
         self.chat_With_Label.setText(item.data())
@@ -305,7 +315,7 @@ class Ui_OptionWindow(object):
         self.password_Button.setGeometry(QtCore.QRect(80, 110, 111, 23))
         self.password_Button.setObjectName("password_Button")
         self.password_Button.setText("Change Password")
-        self.password_Button.pressed.connect(lambda:self.update_Password())
+        self.password_Button.pressed.connect(lambda:self.update_Password(OptionsWindow))
         self.password_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Field to enter mail
@@ -320,7 +330,7 @@ class Ui_OptionWindow(object):
         self.mail_Button.setGeometry(QtCore.QRect(80, 180, 111, 23))
         self.mail_Button.setObjectName("mail_Button")
         self.mail_Button.setText("Change Mail")
-        self.mail_Button.pressed.connect(lambda:self.update_Mail())
+        self.mail_Button.pressed.connect(lambda:self.update_Mail(OptionsWindow))
         self.mail_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Delete account button
@@ -376,14 +386,13 @@ class Ui_OptionWindow(object):
         if(OptionsWindow.active == True):
             OptionsWindow.change_language_signal.emit()
 
-    #TODO
-    def update_Mail(self):
-        if login_Check.mail_New_Check(self.mail_Edit.text(),"English"):
-            pass
-    #TODO
-    def update_Password(self):
-        if login_Check.password_New_Check(self.password_Edit.text(),"English"):
-            pass
+    def update_Mail(self,OptionsWindow):
+        if(OptionsWindow.active == True):
+            OptionsWindow.change_mail_signal.emit(self.mail_Edit.text())
+
+    def update_Password(self,OptionsWindow):
+        if(OptionsWindow.active == True):
+            OptionsWindow.change_password_signal.emit(self.password_Edit.text())
         
 #Options Window
 class Options_Window(QtWidgets.QMainWindow):
@@ -395,6 +404,8 @@ class Options_Window(QtWidgets.QMainWindow):
     close_signal = QtCore.pyqtSignal()
     change_language_signal = QtCore.pyqtSignal()
     delete_signal = QtCore.pyqtSignal()
+    change_mail_signal = QtCore.pyqtSignal(str)
+    change_password_signal = QtCore.pyqtSignal(str)
     
     def setup(self):
         self.options_ui = Ui_OptionWindow()

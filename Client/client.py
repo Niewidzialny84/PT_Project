@@ -45,6 +45,18 @@ class Client(object):
         h, p = Protocol.encode(Header.REG,login=login,password=password,email=email)
         self.transfer(h,p)
 
+    def password(self, password: str): 
+        h, p = Protocol.encode(Header.CHP,password=password)
+        self.transfer(h,p)
+
+    def mail(self, email: str): 
+        h, p = Protocol.encode(Header.CHM,email=email)
+        self.transfer(h,p)
+
+    def delete(self): 
+        h, p = Protocol.encode(Header.DEL,msg='Delete')
+        self.transfer(h,p)
+
     """
     def receive(self):
         try:
