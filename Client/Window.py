@@ -1,32 +1,27 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys, time, socket, threading
+import sys, time
 import login_GUI
 import main_GUI
 import login_Check
 import client
 from stylesheet import *
-from protocol import Header,HeaderParser,Protocol
 
 #TODO true communication with server!!!
 
 class login_Master(login_GUI.Ui_MainWindow):
-
-    def signal_setup(self):
-        MainWindow.ack_signal.connect(self.handle_ack)
-        MainWindow.err_signal.connect(self.handle_error)
-        MainWindow.ses_signal.connect(self.receive_session)
-
     def log_into(self):
+        #TODO usunąć #
         if login_Check.login_Check(self.nick_Text.text(),self.password_Text.text(),self.language_Button.text()):
             MainWindow.client = client.Client()
             if(MainWindow.client.is_Connected == True):
-
-                MainWindow.start_listening()
-
                 MainWindow.client.login(self.nick_Text.text(),self.password_Text.text())
+                if(True):
+                    login_to_main()
+                else:
+                    pass
             else:
                 MainWindow.client = None
-                if(self.language_Button.text()=="Polski"):
+                if(self.language_Button.text()=="English"):
                     message = QtWidgets.QMessageBox()
                     message.setWindowTitle("Error")
                     message.setIcon(QtWidgets.QMessageBox.Critical)
@@ -38,69 +33,17 @@ class login_Master(login_GUI.Ui_MainWindow):
                     message.setIcon(QtWidgets.QMessageBox.Critical)
                     message.setText("Brak połączenia z serwerem!")
                     message.exec_()
-    
-    def handle_error(self,err):
-        if(err == 'Invalid login data'):
-            MainWindow.client.stop()
-            MainWindow.client = None
-            if(self.language_Button.text()=="Polski"):
-                message = QtWidgets.QMessageBox()
-                message.setWindowTitle("Error")
-                message.setIcon(QtWidgets.QMessageBox.Critical)
-                message.setText("Invalid login data!")
-                message.exec_()
-            else:
-                message = QtWidgets.QMessageBox()
-                message.setWindowTitle("Błąd")
-                message.setIcon(QtWidgets.QMessageBox.Critical)
-                message.setText("Niepoprawne dane logowania!")
-                message.exec_()
-        elif(err == 'Account already exists'):
-            MainWindow.client.stop()
-            MainWindow.client = None
-            if(self.language_Button.text()=="Polski"):
-                message = QtWidgets.QMessageBox()
-                message.setWindowTitle("Error")
-                message.setIcon(QtWidgets.QMessageBox.Critical)
-                message.setText("Account with this username already exists!")
-                message.exec_()
-            else:
-                message = QtWidgets.QMessageBox()
-                message.setWindowTitle("Błąd")
-                message.setIcon(QtWidgets.QMessageBox.Critical)
-                message.setText("Konto o tym pseudonimie już istnieje!")
-                message.exec_()
-        elif(err == 'Invalid register data'):
-            MainWindow.client.stop()
-            MainWindow.client = None
-            if(self.language_Button.text()=="Polski"):
-                message = QtWidgets.QMessageBox()
-                message.setWindowTitle("Error")
-                message.setIcon(QtWidgets.QMessageBox.Critical)
-                message.setText("Invalid register data!")
-                message.exec_()
-            else:
-                message = QtWidgets.QMessageBox()
-                message.setWindowTitle("Błąd")
-                message.setIcon(QtWidgets.QMessageBox.Critical)
-                message.setText("Nieprawidłowe dana rejestracji!")
-                message.exec_()
-
-    def receive_session(self):
-        login_to_main()
-
-    def handle_ack(self, message):
-        if (message == 'Created Account'):
-            MainWindow.client.login(self.nick_Register_Text.text(),self.password_Register_Text.text())
 
     def register_into(self):
         if login_Check.register_Check(self.nick_Register_Text.text(),self.password_Register_Text.text(),self.confirm_Password_Register_Text.text(),self.mail_Text.text(),self.language_Button.text()):
             MainWindow.client = client.Client()
             if(MainWindow.client.is_Connected == True):
-
-                MainWindow.start_listening()
-
                 MainWindow.client.register(self.nick_Register_Text.text(),self.password_Register_Text.text(),self.mail_Text.text())
+                MainWindow.client.login(self.nick_Register_Text.text(),self.password_Register_Text.text())
+                if(True):
+                    login_to_main()
+                else:
+                    pass
             else:
                 MainWindow.client = None
                 if(self.language_Button.text()=="English"):
@@ -117,12 +60,6 @@ class login_Master(login_GUI.Ui_MainWindow):
                     message.exec_()
 
 class main_Master(main_GUI.Ui_MainWindow):
-
-    def signal_setup(self):
-        MainWindow.ack_signal.connect(self.handle_ack)
-        MainWindow.err_signal.connect(self.handle_error)
-        MainWindow.lis_signal.connect(self.user_list_update)
-
     def logout(self):
         if(self.language=="English"):
             message = QtWidgets.QMessageBox()
@@ -163,34 +100,9 @@ class main_Master(main_GUI.Ui_MainWindow):
             message.addButton("Nie", QtWidgets.QMessageBox.NoRole)
             message.exec_()
 
-    def handle_ack(self, message):
-        pass
-
-    def handle_error(self, message):
-        pass
-
-    def user_list_update(self, users):
-        self.names = users
-        self.model = QtGui.QStandardItemModel(len(self.names), 1)
-        for row, name in enumerate(self.names):
-            item = QtGui.QStandardItem(name)
-            self.model.setItem(row, 0, item)
-        self.search_filter.setSourceModel(self.model)
-        self.search_Results.setModel(self.search_filter)
-
-
-
-
 class Window(QtWidgets.QMainWindow):
 
     client = None
-    m_flag=False
-    listen_thread = None
-
-    ack_signal = QtCore.pyqtSignal(str)
-    ses_signal = QtCore.pyqtSignal()
-    lis_signal = QtCore.pyqtSignal(list)
-    err_signal = QtCore.pyqtSignal(str)
 
     def mousePressEvent(self, QMouseEvent):
         if QMouseEvent.button()==QtCore.Qt.LeftButton:
@@ -213,40 +125,6 @@ class Window(QtWidgets.QMainWindow):
             self.client.stop()
         event.accept()
 
-    def start_listening(self):
-        self.listen_thread = threading.Thread(target=self.listen)
-        self.listen_thread.start()
-
-    def listen(self):
-        active = True
-
-        while active:
-
-            try:
-                r = self.client.conn.recv(3)
-                if r != b'':
-                    headerType, size = HeaderParser.decode(r)
-                    data = Protocol.decode(self.client.conn.recv(size))
-
-                    if headerType == Header.SES:
-                        self.client.session = data['session']
-                        self.ses_signal.emit()
-                    elif headerType == Header.LIS:
-                        self.lis_signal.emit(data['users'])
-                    elif headerType == Header.ERR:
-                        self.err_signal.emit(data['msg'])
-                    elif headerType == Header.ACK:
-                        self.ack_signal.emit(data['msg'])
-
-            except socket.error as ex:
-                print(ex)
-                active = False
-
-
-
-
-
-
 def login_to_main():
     main_ui.setupUi(MainWindow,login_ui.language_Button.text(),login_ui.nick_Text.text())
     MainWindow.show()
@@ -257,7 +135,6 @@ def change_to_login(message):
         MainWindow.client = None
     login_ui.setupUi(MainWindow)
     # MainWindow.setStyleSheet(main_window_style)
-    MainWindow.listen_thread.join()
     MainWindow.show()
     message.close()
 
@@ -270,9 +147,7 @@ def delete_Account(OptionsWindow,message):
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = Window()
 login_ui = login_Master()
-login_ui.signal_setup()
 main_ui = main_Master()
-main_ui.signal_setup()
 login_ui.setupUi(MainWindow)
 MainWindow.setStyleSheet(main_window_style)
 MainWindow.show()

@@ -132,4 +132,3 @@ class UserLogged(User):
                 self.transfer(h,p)
                 
         return None
-

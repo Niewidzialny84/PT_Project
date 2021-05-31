@@ -5,11 +5,7 @@ import login_Check
 from stylesheet import *
 
 maxlength = 32
-
 class Ui_MainWindow(ABC):
-
-    names = ('')
-
     def setupUi(self, MainWindow, language, username):
 
         self.language = language
@@ -25,8 +21,9 @@ class Ui_MainWindow(ABC):
         self.OptionsWindow.delete_signal.connect(lambda:self.delete_Account())
 
         #Test Users
-        self.model = QtGui.QStandardItemModel(len(self.names), 1)
-        for row, name in enumerate(self.names):
+        names = ('Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka','Karol','Piotr','Eryk','Krzysztof','Jahns','Sebastian','Łukasz','Aleksandra','Kinga','Weroniak','Ania','Czesław','Marcin','Agnieszka')
+        self.model = QtGui.QStandardItemModel(len(names), 1)
+        for row, name in enumerate(names):
             item = QtGui.QStandardItem(name)
             self.model.setItem(row, 0, item)
         self.search_filter = QtCore.QSortFilterProxyModel()
@@ -34,21 +31,22 @@ class Ui_MainWindow(ABC):
 
         #Main settings of the widget
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(974, 617)
-        MainWindow.setFixedSize(974, 617)
+        MainWindow.resize(984, 622)
+        MainWindow.setFixedSize(984, 622)
         MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
         #Top bar with buttons and name
         self.quit_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.quit_Button.setGeometry(QtCore.QRect(934, 0, 41, 31))
+        self.quit_Button.setGeometry(QtCore.QRect(944, 0, 41, 31))
         self.quit_Button.setObjectName("quit_Button")
         self.quit_Button.setText("X")
         self.quit_Button.clicked.connect(lambda:MainWindow.close())
+        self.quit_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         #
         self.minimize_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.minimize_Button.setGeometry(QtCore.QRect(894, 0, 41, 31))
+        self.minimize_Button.setGeometry(QtCore.QRect(904, 0, 41, 31))
         self.minimize_Button.setObjectName("minimize_Button")
         self.minimize_Button.setText("_")
         self.minimize_Button.clicked.connect(lambda:MainWindow.showMinimized())
@@ -65,13 +63,13 @@ class Ui_MainWindow(ABC):
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(790, 40, 16, 571))
         self.line.setFrameShape(QtWidgets.QFrame.VLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        # self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         #
         self.line_2 = QtWidgets.QFrame(self.centralwidget)
         self.line_2.setGeometry(QtCore.QRect(10, 30, 771, 16))
         self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        # self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_2.setObjectName("line_2")
 
         #Name of the person you're chatting with
@@ -138,6 +136,8 @@ class Ui_MainWindow(ABC):
         self.search_Results.setObjectName("search_Results")
         self.search_Results.setModel(self.search_filter)
         self.search_Results.clicked.connect(self.select_conversation)
+        list_scroll_bar = QtWidgets.QScrollBar(self.centralwidget)
+        self.search_Results.setHorizontalScrollBar(list_scroll_bar)
 
         #Active user nick
         self.nick_Label = QtWidgets.QLabel(self.centralwidget)
@@ -155,6 +155,7 @@ class Ui_MainWindow(ABC):
         self.options_Button.setObjectName("language_Button")
         self.options_Button.setText("Settings")
         self.options_Button.clicked.connect(lambda:self.open_Options(MainWindow))#self.change_Language)
+        self.options_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Logout Button
         self.logout_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -162,6 +163,7 @@ class Ui_MainWindow(ABC):
         self.logout_Button.setObjectName("logout_Button")
         self.logout_Button.setText("Logout")
         self.logout_Button.clicked.connect(self.logout)
+        self.logout_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Start change language
         self.change_Language()
@@ -248,13 +250,12 @@ class Ui_OptionWindow(object):
     def setupUi(self, OptionsWindow):
 
         OptionsWindow.setObjectName("OptionsWindow")
-        OptionsWindow.setFixedSize(270, 287)
+        OptionsWindow.setFixedSize(270, 292)
         OptionsWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         #OptionsWindow.setStyleSheet('QMainWindow {background-color: #e4e3e3;} QMessageBox {background-color: #e4e3e3;color: #204051;} QListWidget::item:selected { background-color: #e4e3e3; color: #204051; } QLabel { color: #204051; } QLineEdit {background-color: #84a9ac; border: 1px solid #3b6978} QPushButton {background-color: #84a9ac;color: #204051;border: 1px solid #3b6978; min-height:20px;min-width:50px}')
         self.centralwidget = QtWidgets.QWidget(OptionsWindow)
         self.centralwidget.setObjectName("centralwidget")
         OptionsWindow.setStyleSheet(option_window_style)
-
 
         #Top bar with buttons and name
         self.quit_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -262,12 +263,14 @@ class Ui_OptionWindow(object):
         self.quit_Button.setObjectName("quit_Button")
         self.quit_Button.setText("X")
         self.quit_Button.clicked.connect(lambda:OptionsWindow.close())
+        self.quit_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         #
         self.minimize_Button = QtWidgets.QPushButton(self.centralwidget)
         self.minimize_Button.setGeometry(QtCore.QRect(190, 0, 41, 31))
         self.minimize_Button.setObjectName("minimize_Button")
         self.minimize_Button.setText("_")
         self.minimize_Button.clicked.connect(lambda:OptionsWindow.showMinimized())
+        self.minimize_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         self.app_Name = QtWidgets.QLabel(self.centralwidget)
         self.app_Name.setGeometry(QtCore.QRect(0, 10, 161, 16))
@@ -284,6 +287,7 @@ class Ui_OptionWindow(object):
         self.language_Box.addItem("English")
         self.language_Box.addItem("Polski")
         self.language_Box.currentIndexChanged.connect(lambda:self.send_Change_Language(OptionsWindow))
+        self.language_Box.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Field to enter new password
         self.password_Edit = QtWidgets.QLineEdit(self.centralwidget)
@@ -298,6 +302,7 @@ class Ui_OptionWindow(object):
         self.password_Button.setObjectName("password_Button")
         self.password_Button.setText("Change Password")
         self.password_Button.pressed.connect(lambda:self.update_Password())
+        self.password_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Field to enter mail
         self.mail_Edit = QtWidgets.QLineEdit(self.centralwidget)
@@ -312,6 +317,7 @@ class Ui_OptionWindow(object):
         self.mail_Button.setObjectName("mail_Button")
         self.mail_Button.setText("Change Mail")
         self.mail_Button.pressed.connect(lambda:self.update_Mail())
+        self.mail_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Delete account button
         self.delete_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -319,6 +325,7 @@ class Ui_OptionWindow(object):
         self.delete_Button.setObjectName("delete_Button")
         self.delete_Button.setText("Delete Account")
         self.delete_Button.pressed.connect(lambda:OptionsWindow.delete_signal.emit())
+        self.delete_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #Button to go back
         self.back_Button = QtWidgets.QPushButton(self.centralwidget)
@@ -326,30 +333,31 @@ class Ui_OptionWindow(object):
         self.back_Button.setObjectName("back_Button")
         self.back_Button.setText("Back")
         self.back_Button.pressed.connect(lambda:self.open_Main(OptionsWindow))
+        self.back_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         #All the seperator lines
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(10, 55, 251, 31))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        # self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
 
         self.line_2 = QtWidgets.QFrame(self.centralwidget)
         self.line_2.setGeometry(QtCore.QRect(10, 130, 251, 21))
         self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        # self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_2.setObjectName("line_2")
 
         self.line_3 = QtWidgets.QFrame(self.centralwidget)
         self.line_3.setGeometry(QtCore.QRect(10, 200, 251, 21))
         self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
+        # self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_3.setObjectName("line_3")
 
         self.line_4 = QtWidgets.QFrame(self.centralwidget)
         self.line_4.setGeometry(QtCore.QRect(10, 240, 251, 21))
         self.line_4.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
+        # self.line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_4.setObjectName("line_4")
 
         OptionsWindow.setCentralWidget(self.centralwidget)
