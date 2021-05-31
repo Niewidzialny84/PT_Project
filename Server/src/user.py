@@ -100,7 +100,7 @@ class UserLogged(User):
                 raise socket.error('Disconnect')
             elif headerType == Header.MSG:
                 #TODO create single message handling and adding to database
-                r = requests.post(URL.local+'history-manager', data=json.dumps({'first_username': self.username, 'second_username': data['reciver']}))
+                r = requests.post(URL.local+'history-manager', json={'first_username': self.username, 'second_username': data['reciver']})
             elif headerType == Header.HIS:
                 #TODO: create sending of history to client
                 print('abc')
@@ -112,14 +112,14 @@ class UserLogged(User):
                 else:
                     h,p = Protocol.encode(Header.ERR, msg = 'Deletion failed')
             elif headerType == Header.CHP:
-                r = requests.patch(URL.local+'users', data=json.dumps({'password':data['password']}), params={'username':self.username})
+                r = requests.patch(URL.local+'users', json=({'password':data['password']}), params={'username':self.username})
 
                 if r.status_code == 200:
                     h,p = Protocol.encode(Header.ACK, msg = 'Change password succesfull')
                 else:
                     h,p = Protocol.encode(Header.ERR, msg = 'Change password failed')
             elif headerType == Header.CHM:
-                r = requests.patch(URL.local+'users', data=json.dumps({'email':data['email']}) ,params={'username':self.username})
+                r = requests.patch(URL.local+'users', json=({'email':data['email']}) ,params={'username':self.username})
 
                 if r.status_code == 200:
                     h,p = Protocol.encode(Header.ACK, msg = 'Change mail succesfull')
