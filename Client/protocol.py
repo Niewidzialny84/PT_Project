@@ -17,7 +17,7 @@ class Header(Enum):
     LIS = 7 #List of users !
     FRP = 8 #TODO: Forgot password !
     HIS = 9 #TODO: Returns a user history 
-    UPD = 10 #TODO: Update 
+    UPD = 10 #TODO: Update speaking current user 
     CHP = 11 # Change password !
     CHM = 12 # Change mail !
     DEL = 13 # Remove account !
@@ -117,8 +117,17 @@ class Protocol(object):
             if login != None:
                 data = {'login': login}
             else:
-                raise TypeError('-FRP- Missing login')           
-        
+                raise TypeError('-FRP- Missing login')     
+        elif headerType == Header.HIS:
+            history = kwargs.get('history', [])  
+            if history != []:
+                data = {'history':history}
+            else:
+                raise TypeError('-HIS- Missing history')
+        elif headerType == Header.UPD:
+            reciever = kwargs.get('reciever',None)
+            data = {'reciever':reciever}      
+
         encodedData = json.dumps(data).encode()
         header = HeaderParser.encode(headerType,len(encodedData))
 

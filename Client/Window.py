@@ -7,8 +7,6 @@ import client
 from stylesheet import *
 from protocol import Header,HeaderParser,Protocol
 
-#TODO true communication with server!!!
-
 class login_Master(login_GUI.Ui_MainWindow):
 
     def signal_setup(self):
@@ -89,9 +87,13 @@ class login_Master(login_GUI.Ui_MainWindow):
     def receive_session(self):
         login_to_main()
 
+    def forgot_password(self):
+        MainWindow.client.forgot(self.nick_Text.text())
+
     def handle_ack(self, message):
         if (message == 'Created Account'):
             MainWindow.client.login(self.nick_Register_Text.text(),self.password_Register_Text.text())
+        #TODO handle ACK on forgott password
 
     def register_into(self):
         if login_Check.register_Check(self.nick_Register_Text.text(),self.password_Register_Text.text(),self.confirm_Password_Register_Text.text(),self.mail_Text.text(),self.language_Button.text()):
@@ -122,6 +124,7 @@ class main_Master(main_GUI.Ui_MainWindow):
         MainWindow.ack_signal.connect(self.handle_ack)
         MainWindow.err_signal.connect(self.handle_error)
         MainWindow.lis_signal.connect(self.user_list_update)
+        MainWindow.his_signal.connect(self.update_chat)
 
     def logout(self):
         if(self.language=="English"):
@@ -234,6 +237,15 @@ class main_Master(main_GUI.Ui_MainWindow):
                 message.setText("Wystąpił błąd. Nie można usunąć konta!")
                 message.exec_()
 
+    def select_conversation(self, item):
+        MainWindow.client.update(item.data())
+        self.chat_With_Label.setText(item.data())
+
+    def handle_send(self):
+        if self.chat_Enter_Field.toPlainText() != "":
+            MainWindow.client.message(self.chat_With_Label.text(),self.chat_Enter_Field.toPlainText())
+            self.chat_Enter_Field.clear()
+
     def user_list_update(self, users):
         self.names = users
         self.model = QtGui.QStandardItemModel(len(self.names), 1)
@@ -255,8 +267,8 @@ class main_Master(main_GUI.Ui_MainWindow):
         MainWindow.client.delete()
         messagebox.close()
 
-
-
+    def update_chat(self, history):
+        pass
 
 class Window(QtWidgets.QMainWindow):
 
@@ -268,6 +280,7 @@ class Window(QtWidgets.QMainWindow):
     ses_signal = QtCore.pyqtSignal()
     lis_signal = QtCore.pyqtSignal(list)
     err_signal = QtCore.pyqtSignal(str)
+    his_signal = QtCore.pyqtSignal(list)
 
     def mousePressEvent(self, QMouseEvent):
         if QMouseEvent.button()==QtCore.Qt.LeftButton:
@@ -314,6 +327,8 @@ class Window(QtWidgets.QMainWindow):
                         self.err_signal.emit(data['msg'])
                     elif headerType == Header.ACK:
                         self.ack_signal.emit(data['msg'])
+                    elif headerType == Header.HIS:
+                        self.ack_signal.emit(data['history'])
 
             except socket.error as ex:
                 print(ex)

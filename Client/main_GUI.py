@@ -95,12 +95,7 @@ class Ui_MainWindow(ABC):
         self.chat_Field.setFont(font)
         self.chat_Field.setObjectName("chat_Field")
 
-        #TODO this is only a test
-        file = QtCore.QFile('macbeth.txt')
-        if not file.open(QtCore.QIODevice.ReadOnly):
-            QtWidgets.QMessageBox.information(None, 'info', file.errorString())
-        stream = QtCore.QTextStream(file)
-        self.chat_Field.setText(stream.readAll())
+        self.chat_Field.setText("Witaj!\nWelcome!")
         #Scrollbarjump to bottom
         self.chat_Field.moveCursor(QtGui.QTextCursor.End)
         scrollbar = self.chat_Field.verticalScrollBar()
@@ -234,16 +229,20 @@ class Ui_MainWindow(ABC):
     def change_password(self,text):
         pass
 
-#TODO this has to load the chat once it's there
+    @abstractmethod
     def select_conversation(self, item):
-        self.chat_With_Label.setText(item.data())
+        pass
 
-#TODO has to send and not only write but needs a server
+    @abstractmethod
+    def update_chat(self, history):
+        pass
+
     #Handle the press enter event
+    @abstractmethod
     def handle_send(self):
         if self.chat_Enter_Field.toPlainText() != "":
-            self.chat_Field.append(self.chat_Enter_Field.toPlainText())
-            self.chat_Enter_Field.clear()
+            pass
+            #self.chat_Field.append(self.chat_Enter_Field.toPlainText())
 
 #Event handler looking for pressing enter on the chat window
 class EventFilter(QtCore.QObject):

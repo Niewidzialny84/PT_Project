@@ -203,6 +203,10 @@ class Ui_MainWindow(ABC):
     def register_into(self):
         pass
 
+    @abstractmethod
+    def forgot_password(self):
+        pass
+
     def change_Language(self):
         if(self.language_Button.text() == "Polski"):
             self.language_Button.setText("English")

@@ -57,6 +57,19 @@ class Client(object):
         h, p = Protocol.encode(Header.DEL,msg='Delete')
         self.transfer(h,p)
 
+    def update(self, reciever: str): 
+        h, p = Protocol.encode(Header.UPD,reciever=reciever)
+        self.transfer(h,p)
+
+    def message(self, reciever: str, msg: str): 
+        h, p = Protocol.encode(Header.UPD,reciever=reciever,msg=msg)
+        self.transfer(h,p)
+
+    def forgot(self, login: str):
+        h, p = Protocol.encode(Header.FRP,login=login)
+        self.transfer(h,p)
+
+
     """
     def receive(self):
         try:
