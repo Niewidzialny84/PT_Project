@@ -243,6 +243,8 @@ class main_Master(main_GUI.Ui_MainWindow):
 
     def handle_send(self):
         if self.chat_Enter_Field.toPlainText() != "":
+            print(self.chat_With_Label.text())
+            print(self.chat_Enter_Field.toPlainText())
             MainWindow.client.message(self.chat_With_Label.text(),self.chat_Enter_Field.toPlainText())
             self.chat_Enter_Field.clear()
 
@@ -268,7 +270,9 @@ class main_Master(main_GUI.Ui_MainWindow):
         messagebox.close()
 
     def update_chat(self, history):
-        pass
+        self.chat_Field.setText("")
+        for entry in history:
+            self.chat_Field.append(entry)
 
 class Window(QtWidgets.QMainWindow):
 

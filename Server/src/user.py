@@ -78,7 +78,7 @@ class UserLogged(User):
         self.dbID = dbID
         self.username = username
 
-        self.usersThread = threading.Thread(target=self.userListThread)
+        self.usersThread = threading.Thread(target=self.userListUpdateThread)
         self.usersThread.start()
 
         self.reciever = None
