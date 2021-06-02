@@ -1,7 +1,7 @@
 from logger import Logger
 from protocol import Header,HeaderParser,Protocol
 
-import requests, json, socket
+import requests, json, socket, threading ,time
 
 class URL(object):
     local = 'http://127.0.0.1:5000/api/'
@@ -77,17 +77,45 @@ class UserLogged(User):
         self.uuid = user.uuid
         self.dbID = dbID
         self.username = username
-        r = requests.get(URL.local+'users')
-        
-        l = []
-        for x in r.json():
-            if x['username'] != self.username:
-                l.append(x['username'])
-        h,p = Protocol.encode(Header.LIS, users = l)
-        self.transfer(h,p)
+
+        self.usersThread = threading.Thread(target=self.userListThread)
+        self.usersThread.start()
+
+        self.reciever = None
+        self.historyThread = threading.Thread(target=self.historyUpdateThread)
+        self.historyThread.start()
 
     def __repr__(self):
         return str(self.address)+' '+str(self.uuid)+' '+self.username
+
+    def userListUpdateThread(self):
+        while self.connected:
+            r = requests.get(URL.local+'users')
+            
+            l = []
+            for x in r.json():
+                if x['username'] != self.username:
+                    l.append(x['username'])
+            h,p = Protocol.encode(Header.LIS, users = l)
+            self.transfer(h,p)
+
+            time.sleep(10)
+
+    def historyUpdateThread(self):
+        while self.connected:
+            if self.reciever != None:
+                r = requests.get(URL.local+'history-manager',params={'first_username':self.username,'second_username':self.reciever})
+
+                if r.status_code == 200:
+                    history = []
+                    for x in r.json():
+                        history.append('['+str(x['date'])+'] '+str(x['username'])+': '+str(x['content']))
+
+                    h,p = Protocol.encode(Header.HIS, history = history)
+                    self.transfer(h,p)
+
+
+                time.sleep(0.8)
 
     def handle(self):
         r = self.socket.recv(3)
@@ -101,9 +129,6 @@ class UserLogged(User):
             elif headerType == Header.MSG:
                 #TODO create single message handling and adding to database
                 r = requests.post(URL.local+'history-manager', json={'first_username': self.username, 'second_username': data['reciver']})
-            elif headerType == Header.HIS:
-                #TODO: create sending of history to client
-                print('abc')
             elif headerType == Header.DEL:
                 r = requests.delete(URL.local+'users', params={'username':self.username})
 
@@ -126,7 +151,7 @@ class UserLogged(User):
                 else:
                     h,p = Protocol.encode(Header.ERR, msg = 'Change mail failed')
             elif headerType == Header.UPD:
-                print('any update')
+                self.reciever = data['reciever']
 
             if h != None and p != None:
                 self.transfer(h,p)
