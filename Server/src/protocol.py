@@ -126,7 +126,7 @@ class Protocol(object):
                 raise TypeError('-HIS- Missing history')
         elif headerType == Header.UPD:
             reciever = kwargs.get('reciever',None)
-            data = {'reciver':reciever}      
+            data = {'reciever':reciever}      
 
         encodedData = json.dumps(data).encode()
         header = HeaderParser.encode(headerType,len(encodedData))

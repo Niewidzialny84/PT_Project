@@ -127,8 +127,8 @@ class UserLogged(User):
             if headerType == Header.DIS:
                 raise socket.error('Disconnect')
             elif headerType == Header.MSG:
-                #TODO create single message handling and adding to database
-                r = requests.post(URL.local+'history-manager', json={'first_username': self.username, 'second_username': data['reciver']})
+                historyID = self.checkHistory(self.username,data['reciever'])
+                r.request.post(URL.local+'history-manager', json={'history_id':historyID, 'username':self.username, 'content': data['msg']})      
             elif headerType == Header.DEL:
                 r = requests.delete(URL.local+'users', params={'username':self.username})
 
@@ -152,9 +152,25 @@ class UserLogged(User):
                     h,p = Protocol.encode(Header.ERR, msg = 'Change mail failed')
             elif headerType == Header.UPD:
                 self.reciever = data['reciever']
+                if self.reciever != None:
+                    self.checkHistory(self.username,self.reciever)
 
             if h != None and p != None:
                 self.transfer(h,p)
                 
         return None
 
+    def checkHistory(self, u1, u2):
+        r = requests.get(URL.local+'history-manager/historyID', params={'first_username': u1, 'second_username': u2})
+
+        if r.status_code == 200:
+            historyID = r.json()['history_id']
+
+            return historyID
+        elif r.status_code == 404:
+            r = requests.post(URL.local+'history-manager', json={'first_username': u1, 'second_username': u2})
+            if r.status_code == 201:
+                r = requests.get(URL.local+'history-manager/historyID', params={'first_username': u1, 'second_username': u2})
+                historyID = r.json()['history_id']
+
+                return historyID
