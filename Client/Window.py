@@ -238,6 +238,7 @@ class main_Master(main_GUI.Ui_MainWindow):
                 message.exec_()
 
     def select_conversation(self, item):
+        self.chat_Field.setText("")
         MainWindow.client.update(item.data())
         self.chat_With_Label.setText(item.data())
 
