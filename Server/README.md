@@ -58,85 +58,85 @@ Bytes inside are encoded json documents which after decoding can contain specifi
     <tr>
         <td>ACK</td>
         <td></td>
-        <td><code>msg: str<code></td>
+        <td><code>msg: str</code></td>
         <td>Acknowledment, for information about correct data in specific types</td>
     </tr>
     <tr>
         <td>ERR</td>
         <td></td>
-        <td><code>msg: str<code></td>
+        <td><code>msg: str</code></td>
         <td>Any type of error that ocured based on the recived data</td>
     </tr>
     <tr>
         <td>DIS</td>
         <td></td>
-        <td><code>msg: str<code></td>
+        <td><code>msg: str</code></td>
         <td>A disconnect message</td>
     </tr>
     <tr>
         <td>MSG</td>
-        <td><code>msg: str<code></td>
-        <td><code>reciever: str<code></td>
+        <td><code>msg: str</code></td>
+        <td><code>reciever: str</code></td>
         <td>Message that was send</td>
     </tr>
     <tr>
         <td>LOG</td>
-        <td><code>login: str<code><br><code>password: str<code></td>
+        <td><code>login: str</code><br><code>password: str</code></td>
         <td></td>
         <td>Login data for verifying the users</td>
     </tr>
     <tr>
         <td>SES</td>
-        <td><code>session: int<code></td>
+        <td><code>session: int</code></td>
         <td></td>
         <td>Session id, send after succesfull login</td>
     </tr>
     <tr>
         <td>REG</td>
-        <td><code>login: str<code><br><code>password: str<code><br><code>email: str<code></td>
+        <td><code>login: str</code><br><code>password: str</code><br><code>email: str</code></td>
         <td></td>
         <td>Register data for creating new accounts</td>
     </tr>
     <tr>
         <td>LIS</td>
-        <td><code>users: list<code></td>
+        <td><code>users: list</code></td>
         <td></td>
         <td>A list of all registered users</td>
     </tr>
     <tr>
         <td>FRP</td>
-        <td><code>login: str<code></td>
+        <td><code>login: str</code></td>
         <td></td>
         <td>Forgot password, which informs to send a mail to the user address</td>
     </tr>
     <tr>
         <td>HIS</td>
-        <td><code>history: list<code></td>
+        <td><code>history: list</code></td>
         <td></td>
         <td>History of the current active user we are speaking to</td>
     </tr>
     <tr>
         <td>UPD</td>
         <td></td>
-        <td><code>reciever: str<code></td>
+        <td><code>reciever: str</code></td>
         <td>Information about current user that we speak to</td>
     </tr>
     <tr>
         <td>CHP</td>
-        <td><code>password: str<code></td>
+        <td><code>password: str</code></td>
         <td></td>
         <td>Change password, for logged users</td>
     </tr>
     <tr>
         <td>CHM</td>
-        <td><code>email: str<code></td>
+        <td><code>email: str</code></td>
         <td></td>
         <td>Mail changing, for logged users</td>
     </tr>
     <tr>
         <td>DEL</td>
         <td></td>
-        <td><code>msg: str<code></td>
+        <td><code>msg: str</code></td>
         <td>Removal of the user account, only for logged users</td>
     </tr>
 </table>
