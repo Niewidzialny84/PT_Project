@@ -133,21 +133,19 @@ class login_Master(login_GUI.Ui_MainWindow):
         elif(message == 'Send recovery mail'):
             MainWindow.client.stop()
             MainWindow.client = None
-            if(self.language_Button.text()=="Polski"):
+            MainWindow.client = None
+            if(self.language_Button.text()=="English"):
                 message = QtWidgets.QMessageBox()
-                message.setWindowTitle("Error")
-                message.setIcon(QtWidgets.QMessageBox.Critical)
-                message.setText("Coulndn't recover password!")
+                message.setWindowTitle("Mail send")
+                message.setIcon(QtWidgets.QMessageBox.Information)
+                message.setText("An email with your password was sent!")
                 message.exec_()
             else:
                 message = QtWidgets.QMessageBox()
-                message.setWindowTitle("Błąd")
-                message.setIcon(QtWidgets.QMessageBox.Critical)
-                message.setText("Nie udało się odzyzkać hasła!")
+                message.setWindowTitle("Wysłano E-Mail")
+                message.setIcon(QtWidgets.QMessageBox.Information)
+                message.setText("Wysłano E-Mail z twoim hasłem!")
                 message.exec_()
-            if MainWindow.client != None:
-                MainWindow.client.stop()
-                MainWindow.client = None
             MainWindow.listen_thread.join()
 
     def register_into(self):
@@ -160,17 +158,17 @@ class login_Master(login_GUI.Ui_MainWindow):
                 MainWindow.client.register(self.nick_Register_Text.text(),self.password_Register_Text.text(),self.mail_Text.text())
             else:
                 MainWindow.client = None
-                if(self.language_Button.text()=="English"):
+                if(self.language_Button.text()=="Polski"):
                     message = QtWidgets.QMessageBox()
-                    message.setWindowTitle("Mail send")
-                    message.setIcon(QtWidgets.QMessageBox.Information)
-                    message.setText("An email with your password was sent!")
+                    message.setWindowTitle("Error")
+                    message.setIcon(QtWidgets.QMessageBox.Critical)
+                    message.setText("No connection with the server!")
                     message.exec_()
                 else:
                     message = QtWidgets.QMessageBox()
-                    message.setWindowTitle("Wysłano E-Mail")
-                    message.setIcon(QtWidgets.QMessageBox.Information)
-                    message.setText("Wysłano E-Mail z twoim hasłem!")
+                    message.setWindowTitle("Błąd")
+                    message.setIcon(QtWidgets.QMessageBox.Critical)
+                    message.setText("Brak połączenia z serwerem!")
                     message.exec_()
 
 class main_Master(main_GUI.Ui_MainWindow):
