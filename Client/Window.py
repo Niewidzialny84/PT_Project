@@ -133,7 +133,6 @@ class login_Master(login_GUI.Ui_MainWindow):
         elif(message == 'Send recovery mail'):
             MainWindow.client.stop()
             MainWindow.client = None
-            MainWindow.client = None
             if(self.language_Button.text()=="English"):
                 message = QtWidgets.QMessageBox()
                 message.setWindowTitle("Mail send")
