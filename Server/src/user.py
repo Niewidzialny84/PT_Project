@@ -66,7 +66,7 @@ class User(object):
                 if ru.status_code == 200:
                     if j != {}:
                         mail = j['email']
-                        r = requests.post('https://127.0.0.1:5000/token/'+data['login'])
+                        r = requests.post('https://127.0.0.1:5050/token/'+data['login'])
                         token = r.json()['token']
                         threading.Thread(target=sendRecoveryMail,params=(data['login'],token,)).start()
                         Logger.log('FRP send')
