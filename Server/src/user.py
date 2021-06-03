@@ -68,7 +68,7 @@ class User(object):
                         mail = j['email']
                         r = requests.post('https://127.0.0.1:5000/token/'+data['login'])
                         token = r.json()['token']
-                        threading.Thread(target=sendRecoveryMail,params=(data['login'],token,))
+                        threading.Thread(target=sendRecoveryMail,params=(data['login'],token,)).start()
                         Logger.log('FRP send')
 
                     h,p = Protocol.encode(Header.ACK, msg = 'Send recovery mail')
