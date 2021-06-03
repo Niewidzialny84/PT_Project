@@ -76,7 +76,6 @@ class User(object):
                 else:
                     h,p = Protocol.encode(Header.ERR, msg = 'Error occured')
                     Logger.log('FRP error')
-                print('lol he forgot password')
             elif headerType == Header.DIS:
                 raise socket.error(data['msg'])
                 
