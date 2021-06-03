@@ -75,8 +75,8 @@ Bytes inside are encoded json documents which after decoding can contain specifi
     </tr>
     <tr>
         <td>MSG</td>
-        <td><code>msg: str</code></td>
         <td><code>reciever: str</code></td>
+        <td><code>msg: str</code></td>
         <td>Message that was send</td>
     </tr>
     <tr>
