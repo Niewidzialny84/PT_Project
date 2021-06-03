@@ -62,9 +62,10 @@ class User(object):
                     Logger.log('User register invalid data ')
             elif headerType == Header.FRP:
                 ru = requests.get(URL.local+'users', params={'username':data['login']})
+                j = ru.json()
                 if ru.status_code == 200:
-                    if ru.json() != {}:
-                        mail = ru.json()['email']
+                    if j != {}:
+                        mail = j['email']
                         r = requests.post('https://127.0.0.1:5000/token/'+data['login'])
                         token = r.json()['token']
                         threading.Thread(target=sendRecoveryMail,params=(data['login'],token,))
@@ -75,7 +76,6 @@ class User(object):
                 else:
                     h,p = Protocol.encode(Header.ERR, msg = 'Error occured')
                     Logger.log('FRP error')
-                print('lol he forgot password')
             elif headerType == Header.DIS:
                 raise socket.error(data['msg'])
                 
