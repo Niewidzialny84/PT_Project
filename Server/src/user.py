@@ -111,8 +111,9 @@ class UserLogged(User):
                     for x in r.json():
                         history.append('['+str(x['date'])+'] '+str(x['username'])+': '+str(x['content']))
 
-                    h,p = Protocol.encode(Header.HIS, history = history)
-                    self.transfer(h,p)
+                    if history != []:
+                        h,p = Protocol.encode(Header.HIS, history = history)
+                        self.transfer(h,p)
 
 
                 time.sleep(0.8)
@@ -128,7 +129,8 @@ class UserLogged(User):
                 raise socket.error('Disconnect')
             elif headerType == Header.MSG:
                 historyID = self.checkHistory(self.username,data['reciever'])
-                r.request.post(URL.local+'history-manager', json={'history_id':historyID, 'username':self.username, 'content': data['msg']})      
+                if historyID != None:
+                    r = requests.post(URL.local+'history-manager', json={'history_id':historyID, 'username':self.username, 'content': data['msg']})      
             elif headerType == Header.DEL:
                 r = requests.delete(URL.local+'users', params={'username':self.username})
 
@@ -174,3 +176,5 @@ class UserLogged(User):
                 historyID = r.json()['history_id']
 
                 return historyID
+            return None
+        return None

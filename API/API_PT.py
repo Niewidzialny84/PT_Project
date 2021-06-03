@@ -215,7 +215,8 @@ class HistoryManager(Resource):
             try: history_id = History.query.filter_by(first_username = first_username, second_username = second_username).first().id
             except Exception as _: history_id = None
             if history_id == None:
-                history_id = History.query.filter_by(first_username = second_username, second_username = first_username).first().id
+                try: history_id = History.query.filter_by(first_username = second_username, second_username = first_username).first().id
+                except Exception as _: history_id = None
             if history_id == None:
                 return make_response(jsonify({'Message': 'NOT_EXIST'}), 404)
             else:

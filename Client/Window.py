@@ -333,7 +333,7 @@ class Window(QtWidgets.QMainWindow):
                     elif headerType == Header.ACK:
                         self.ack_signal.emit(data['msg'])
                     elif headerType == Header.HIS:
-                        self.ack_signal.emit(data['history'])
+                        self.his_signal.emit(data['history'])
 
             except socket.error as ex:
                 print(ex)

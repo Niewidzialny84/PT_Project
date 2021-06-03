@@ -62,7 +62,7 @@ class Client(object):
         self.transfer(h,p)
 
     def message(self, reciever: str, msg: str): 
-        h, p = Protocol.encode(Header.UPD,reciever=reciever,msg=msg)
+        h, p = Protocol.encode(Header.MSG,reciever=reciever,msg=msg)
         self.transfer(h,p)
 
     def forgot(self, login: str):
