@@ -1,6 +1,8 @@
 from logger import Logger
 from protocol import Header,HeaderParser,Protocol
 
+from mail import sendRecoveryMail
+
 import requests, json, hashlib, os, socket, threading ,time
 
 class URL(object):
@@ -59,7 +61,20 @@ class User(object):
                     h,p = Protocol.encode(Header.ERR, msg = 'Invalid register data')
                     Logger.log('User register invalid data ')
             elif headerType == Header.FRP:
-                #TODO: handle the forgot password function
+                ru = requests.get(URL.local+'users', params={'username':data['login']})
+                if ru.status_code == 200:
+                    if ru.json() != {}:
+                        mail = ru.json()['email']
+                        r = requests.post('https://127.0.0.1:5000/token/'+data['login'])
+                        token = r.json()['token']
+                        threading.Thread(target=sendRecoveryMail,params=(data['login'],token,))
+                        Logger.log('FRP send')
+
+                    h,p = Protocol.encode(Header.ACK, msg = 'Send recovery mail')
+                    Logger.log('FRP used')
+                else:
+                    h,p = Protocol.encode(Header.ERR, msg = 'Error occured')
+                    Logger.log('FRP error')
                 print('lol he forgot password')
             elif headerType == Header.DIS:
                 raise socket.error(data['msg'])
@@ -128,8 +143,7 @@ class UserLogged(User):
                         h,p = Protocol.encode(Header.HIS, history = history)
                         self.transfer(h,p)
 
-
-                time.sleep(0.8)
+                time.sleep(0.5)
 
     def handle(self):
         r = self.socket.recv(3)

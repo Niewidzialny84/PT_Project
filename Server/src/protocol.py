@@ -15,7 +15,7 @@ class Header(Enum):
     SES = 5 #Session !
     REG = 6 #Register !
     LIS = 7 #List of users !
-    FRP = 8 #TODO Forgot password !
+    FRP = 8 #Forgot password !
     HIS = 9 # Returns a user history  !
     UPD = 10 #T Update speaking current user !
     CHP = 11 # Change password !
