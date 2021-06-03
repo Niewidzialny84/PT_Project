@@ -15,7 +15,7 @@ class Client(object):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-        self.addr = ('127.0.0.1',7777)
+        self.addr = ('molly.ovh',7777)
 
         self.conn = self.context.wrap_socket(self.sock,server_hostname=self.addr[0])
         try:

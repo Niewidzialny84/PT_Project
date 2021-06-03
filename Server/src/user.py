@@ -84,8 +84,11 @@ class User(object):
         return None
 
     def transfer(self,h,p):
-        self.socket.send(h)
-        self.socket.send(p)
+        try:
+            self.socket.send(h)
+            self.socket.send(p)
+        except Exception as ex:
+            pass
     
     def passwordHash(self, password: str, salt=None):
         salt = salt or os.urandom(32)
