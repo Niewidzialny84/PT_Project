@@ -83,6 +83,21 @@ class login_Master(login_GUI.Ui_MainWindow):
                 message.setIcon(QtWidgets.QMessageBox.Critical)
                 message.setText("Nieprawidłowe dana rejestracji!")
                 message.exec_()
+        elif(err == 'Error occured'):
+            MainWindow.client.stop()
+            MainWindow.client = None
+            if(self.language_Button.text()=="Polski"):
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Error")
+                message.setIcon(QtWidgets.QMessageBox.Critical)
+                message.setText("Coulndn't recover password!")
+                message.exec_()
+            else:
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Błąd")
+                message.setIcon(QtWidgets.QMessageBox.Critical)
+                message.setText("Nie udało się odzyzkać hasła!")
+                message.exec_()
 
     def receive_session(self):
         login_to_main()
@@ -93,7 +108,21 @@ class login_Master(login_GUI.Ui_MainWindow):
     def handle_ack(self, message):
         if (message == 'Created Account'):
             MainWindow.client.login(self.nick_Register_Text.text(),self.password_Register_Text.text())
-        #TODO handle ACK on forgott password
+        elif(message == 'Send recovery mail'):
+            MainWindow.client.stop()
+            MainWindow.client = None
+            if(self.language_Button.text()=="Polski"):
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Error")
+                message.setIcon(QtWidgets.QMessageBox.Critical)
+                message.setText("Coulndn't recover password!")
+                message.exec_()
+            else:
+                message = QtWidgets.QMessageBox()
+                message.setWindowTitle("Błąd")
+                message.setIcon(QtWidgets.QMessageBox.Critical)
+                message.setText("Nie udało się odzyzkać hasła!")
+                message.exec_()
 
     def register_into(self):
         if login_Check.register_Check(self.nick_Register_Text.text(),self.password_Register_Text.text(),self.confirm_Password_Register_Text.text(),self.mail_Text.text(),self.language_Button.text()):
@@ -107,15 +136,15 @@ class login_Master(login_GUI.Ui_MainWindow):
                 MainWindow.client = None
                 if(self.language_Button.text()=="English"):
                     message = QtWidgets.QMessageBox()
-                    message.setWindowTitle("Error")
-                    message.setIcon(QtWidgets.QMessageBox.Critical)
-                    message.setText("No connection with the server!")
+                    message.setWindowTitle("Mail send")
+                    message.setIcon(QtWidgets.QMessageBox.Information)
+                    message.setText("An email with your password was sent!")
                     message.exec_()
                 else:
                     message = QtWidgets.QMessageBox()
-                    message.setWindowTitle("Błąd")
-                    message.setIcon(QtWidgets.QMessageBox.Critical)
-                    message.setText("Brak połączenia z serwerem!")
+                    message.setWindowTitle("Wysłano E-Mail")
+                    message.setIcon(QtWidgets.QMessageBox.Information)
+                    message.setText("Wysłano E-Mail z twoim hasłem!")
                     message.exec_()
 
 class main_Master(main_GUI.Ui_MainWindow):
