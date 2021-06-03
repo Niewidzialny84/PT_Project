@@ -145,6 +145,9 @@ class login_Master(login_GUI.Ui_MainWindow):
                 message.setIcon(QtWidgets.QMessageBox.Information)
                 message.setText("Wysłano E-Mail z twoim hasłem!")
                 message.exec_()
+            if MainWindow.client != None:
+                MainWindow.client.stop()
+                MainWindow.client = None
             MainWindow.listen_thread.join()
 
     def register_into(self):
