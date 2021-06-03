@@ -66,7 +66,6 @@ class Server(object):
         while self.running:
             try:
                 c, addr = self.sock.accept()
-                #Logger.log('Connection from: '+str(addr))
 
                 wrap = self.context.wrap_socket(c,server_side=True)
 
@@ -85,7 +84,6 @@ class Server(object):
         while self.running and user.connected:
             try:
                 ret = u.handle()
-                #if isinstance(ret, UserLogged):
                 if ret != None:
                     self.users.replace(u,ret)
                     u = ret

@@ -112,6 +112,10 @@ class UserLogged(User):
                         history.append('['+str(x['date'])+'] '+str(x['username'])+': '+str(x['content']))
 
                     if history != []:
+                        if len(history) > 200:
+                            history.reverse()
+                            history = history[:200]
+                            history.reverse()
                         h,p = Protocol.encode(Header.HIS, history = history)
                         self.transfer(h,p)
 
