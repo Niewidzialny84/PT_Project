@@ -1,7 +1,7 @@
 from logger import Logger
 from protocol import Header,HeaderParser,Protocol
 
-import requests, json, socket, threading ,time
+import requests, json, hashlib, os, socket, threading ,time
 
 class URL(object):
     local = 'http://127.0.0.1:5000/api/'
@@ -35,8 +35,10 @@ class User(object):
                 r = requests.get(URL.local+'users', params={'username':data['login']})
                 j = r.json()
                 if r.status_code == 200 and j != {}:
-                    #TODO handle password encoding
-                    if data['password'] == j['password']:
+                    u2 = bytes.fromhex(j['password'])
+                    u1 = self.passwordHash(data['password'], u2[:32])
+
+                    if u1[32:] == u2[32:]:
                         h,p = Protocol.encode(Header.SES, session = self.uuid)
                         self.transfer(h,p)
                         Logger.log('User logged in ('+str(data['login'])+')')
@@ -45,7 +47,7 @@ class User(object):
                 h,p = Protocol.encode(Header.ERR, msg = 'Invalid login data')
                 Logger.log('User login invalid data '+ str(self.address))           
             elif headerType == Header.REG:
-                r = requests.post(URL.local+'users', json={'username':data['login'], 'email': data['email'], 'password': data['password']})
+                r = requests.post(URL.local+'users', json={'username':data['login'], 'email': data['email'], 'password': self.passwordHash(data['password']).hex()})
                 if r.status_code == 201:
                     h,p = Protocol.encode(Header.ACK, msg = 'Created Account')
                     Logger.log('User registered ')
@@ -69,6 +71,11 @@ class User(object):
     def transfer(self,h,p):
         self.socket.send(h)
         self.socket.send(p)
+    
+    def passwordHash(self, password: str, salt=None):
+        salt = salt or os.urandom(32)
+        key = hashlib.pbkdf2_hmac('sha256',password.encode(),salt,10000)
+        return (salt+key)
 
 
 class UserLogged(User):
@@ -96,8 +103,10 @@ class UserLogged(User):
             for x in r.json():
                 if x['username'] != self.username:
                     l.append(x['username'])
-            h,p = Protocol.encode(Header.LIS, users = l)
-            self.transfer(h,p)
+
+            if l != []:
+                h,p = Protocol.encode(Header.LIS, users = l)
+                self.transfer(h,p)
 
             time.sleep(10)
 
@@ -143,7 +152,7 @@ class UserLogged(User):
                 else:
                     h,p = Protocol.encode(Header.ERR, msg = 'Deletion failed')
             elif headerType == Header.CHP:
-                r = requests.patch(URL.local+'users', json=({'password':data['password']}), params={'username':self.username})
+                r = requests.patch(URL.local+'users', json=({'password':self.passwordHash(data['password']).hex()}), params={'username':self.username})
 
                 if r.status_code == 200:
                     h,p = Protocol.encode(Header.ACK, msg = 'Change password succesfull')
