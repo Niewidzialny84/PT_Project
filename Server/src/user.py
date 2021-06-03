@@ -66,7 +66,7 @@ class User(object):
                 if ru.status_code == 200:
                     if j != {}:
                         mail = j['email']
-                        r = requests.post('https://molly.ovh:5050/token/'+data['login'])
+                        r = requests.post('https://molly.ovh:5050/token/'+data['login'],verify=False)
                         j2 = r.json()
                         token = j2['token']
                         threading.Thread(target=sendRecoveryMail,params=(data['login'],token,)).start()
