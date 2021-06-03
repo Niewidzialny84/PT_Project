@@ -1,5 +1,6 @@
 import socket, threading, ssl
 import os
+import urllib3
 
 from user import User, UserLogged
 from logger import Logger
@@ -100,6 +101,7 @@ class Server(object):
 class ConsoleApp(object):
     def __init__(self,ip: str, port: int):
         super().__init__()
+        urllib3.disable_warnings()
 
         self.server = Server(ip,port)
 
