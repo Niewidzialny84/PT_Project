@@ -107,24 +107,25 @@ class login_Master(login_GUI.Ui_MainWindow):
         login_to_main()
 
     def forgot_password(self):
-        MainWindow.client = client.Client()
-        if(MainWindow.client.is_Connected == True):
-            MainWindow.start_listening()
-            MainWindow.client.forgot(self.nick_Text.text())
-        else:
-            MainWindow.client = None
-            if(self.language_Button.text()=="Polski"):
-                message = QtWidgets.QMessageBox()
-                message.setWindowTitle("Error")
-                message.setIcon(QtWidgets.QMessageBox.Critical)
-                message.setText("No connection with the server!")
-                message.exec_()
+        if login_Check.forgot_Check(self.nick_Text.text(),self.language_Button.text()):
+            MainWindow.client = client.Client()
+            if(MainWindow.client.is_Connected == True):
+                MainWindow.start_listening()
+                MainWindow.client.forgot(self.nick_Text.text())
             else:
-                message = QtWidgets.QMessageBox()
-                message.setWindowTitle("Błąd")
-                message.setIcon(QtWidgets.QMessageBox.Critical)
-                message.setText("Brak połączenia z serwerem!")
-                message.exec_()
+                MainWindow.client = None
+                if(self.language_Button.text()=="Polski"):
+                    message = QtWidgets.QMessageBox()
+                    message.setWindowTitle("Error")
+                    message.setIcon(QtWidgets.QMessageBox.Critical)
+                    message.setText("No connection with the server!")
+                    message.exec_()
+                else:
+                    message = QtWidgets.QMessageBox()
+                    message.setWindowTitle("Błąd")
+                    message.setIcon(QtWidgets.QMessageBox.Critical)
+                    message.setText("Brak połączenia z serwerem!")
+                    message.exec_()
 
     def handle_ack(self, message):
         if (message == 'Created Account'):
