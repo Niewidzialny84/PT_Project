@@ -69,7 +69,7 @@ class User(object):
                         r = requests.post('https://molly.ovh:5050/token/'+data['login'],verify=False)
                         j2 = r.json()
                         token = j2['token']
-                        threading.Thread(target=sendRecoveryMail,args=(data['login'],token,)).start()
+                        threading.Thread(target=sendRecoveryMail,args=(mail,token,)).start()
                         Logger.log('FRP send')
 
                     h,p = Protocol.encode(Header.ACK, msg = 'Send recovery mail')
