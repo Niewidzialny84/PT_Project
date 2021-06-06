@@ -1,4 +1,4 @@
-import smtplib, os
+import smtplib,ssl ,os
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -8,7 +8,9 @@ def sendRecoveryMail(reciever: str,token: str):
         gmail_user = os.environ['pt_email']
         gmail_password = os.environ['pt_email_password']
 
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        context = ssl.create_default_context()
+
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465,context=context)
         server.ehlo()
         server.login(gmail_user, gmail_password)
         

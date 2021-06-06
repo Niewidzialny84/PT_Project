@@ -154,7 +154,7 @@ class Ui_MainWindow(ABC):
         # self.forgot_Button.setGeometry(QtCore.QRect(10, 120, 201, 25))
         self.forgot_Button.setObjectName("forgot_Button")
         self.forgot_Button.setText("Forgot Password")
-        self.forgot_Button.clicked.connect(lambda:login_Check.forgot_Check(self.nick_Text.text(),self.language_Button.text()))
+        self.forgot_Button.clicked.connect(lambda:self.forgot_password())
         self.verticalLayout_3.addWidget(self.forgot_Button)
         self.forgot_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 

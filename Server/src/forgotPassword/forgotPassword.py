@@ -32,7 +32,7 @@ def resetWithToken(token):
     form = PasswordForm()
 
     if form.validate_on_submit():
-        r = requests.patch('127.0.0.1:5000/api/users', json=({'password':passwordHash(form.password.data).hex()}), params={'username':usr})
+        r = requests.patch('http://127.0.0.1:5000/api/users', json=({'password':passwordHash(form.password.data).hex()}), params={'username':usr})
         tokens.pop(token)
 
         return make_response('Password succesfully changed',200)
