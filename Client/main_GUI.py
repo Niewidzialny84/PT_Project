@@ -63,7 +63,7 @@ class Ui_MainWindow(ABC):
         font.setPointSize(10)
         self.app_Name.setFont(font)
         self.app_Name.setObjectName("app_Name")
-        self.app_Name.setText(" ")
+        self.app_Name.setText(" MESSAGER")
 
         #Lines dividing the screen
         self.line = QtWidgets.QFrame(self.centralwidget)
@@ -291,7 +291,7 @@ class Ui_OptionWindow(object):
         font.setPointSize(10)
         self.app_Name.setFont(font)
         self.app_Name.setObjectName("app_Name")
-        self.app_Name.setText(" ")
+        self.app_Name.setText(" MESSAGER")
 
         #Box with languages
         self.language_Box = QtWidgets.QComboBox(self.centralwidget)
