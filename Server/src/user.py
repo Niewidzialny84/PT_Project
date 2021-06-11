@@ -36,20 +36,24 @@ class User(object):
             if headerType == Header.LOG:
                 r = requests.get(URL.local+'users', params={'username':data['login']})
                 j = r.json()
-                if r.status_code == 200 and j != {}:
+                if r.status_code == 200 and j != {} and data['password'] != 'X':
                     u2 = bytes.fromhex(j['password'])
-                    u1 = self.passwordHash(data['password'], u2[:32])
+                    u1 = bytes.fromhex(data['password'])
 
                     if u1[32:] == u2[32:]:
                         h,p = Protocol.encode(Header.SES, session = self.uuid)
                         self.transfer(h,p)
                         Logger.log('User logged in ('+str(data['login'])+')')
                         return UserLogged(self,j['id'],j['username'])
+                elif r.status_code == 200 and j != {} and data['password'] == 'X':
+                    h,p = Protocol.encode(Header.LOG,login=data['login'],password=j['password'])
+                    self.transfer(h,p)
+                    return None
                 
                 h,p = Protocol.encode(Header.ERR, msg = 'Invalid login data')
                 Logger.log('User login invalid data '+ str(self.address))           
             elif headerType == Header.REG:
-                r = requests.post(URL.local+'users', json={'username':data['login'], 'email': data['email'], 'password': self.passwordHash(data['password']).hex()})
+                r = requests.post(URL.local+'users', json={'username':data['login'], 'email': data['email'], 'password': data['password']})
                 if r.status_code == 201:
                     h,p = Protocol.encode(Header.ACK, msg = 'Created Account')
                     Logger.log('User registered ')
@@ -170,7 +174,7 @@ class UserLogged(User):
                 else:
                     h,p = Protocol.encode(Header.ERR, msg = 'Deletion failed')
             elif headerType == Header.CHP:
-                r = requests.patch(URL.local+'users', json=({'password':self.passwordHash(data['password']).hex()}), params={'username':self.username})
+                r = requests.patch(URL.local+'users', json=({'password':data['password']}), params={'username':self.username})
 
                 if r.status_code == 200:
                     h,p = Protocol.encode(Header.ACK, msg = 'Change password succesfull')

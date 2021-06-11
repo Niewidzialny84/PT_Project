@@ -389,15 +389,13 @@ class Window(QtWidgets.QMainWindow):
                         self.ack_signal.emit(data['msg'])
                     elif headerType == Header.HIS:
                         self.his_signal.emit(data['history'])
+                    elif headerType == Header.LOG:
+                        self.client.salt = bytes.fromhex(data['password'])[:32]
+                        MainWindow.client.login(None,None)
 
             except socket.error as ex:
                 print(ex)
                 active = False
-
-
-
-
-
 
 def login_to_main():
     main_ui.setupUi(MainWindow,login_ui.language_Button.text(),login_ui.nick_Text.text())

@@ -2,6 +2,7 @@ import socket, ssl
 import threading
 from protocol import Header,HeaderParser,Protocol
 import time
+import os,hashlib
 
 class Client(object):
     def __init__(self):
@@ -15,16 +16,15 @@ class Client(object):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-        self.addr = ('molly.ovh',7777)
+        self.addr = ('127.0.0.1',7777)
+        self.salt = None
+        self.username = None
+        self.password = None
 
         self.conn = self.context.wrap_socket(self.sock,server_hostname=self.addr[0])
         try:
             self.conn.connect(self.addr)
             self.is_Connected = True
-
-            #if self.is_Connected:
-            #    self.reciveThread = threading.Thread(target=self.receive)
-            #    self.reciveThread.start()
             
         except Exception as err:
             print(err)
@@ -36,17 +36,29 @@ class Client(object):
             self.conn.send(p)
         except socket.error as ex:
             print(ex)
+    
+    def passwordHash(self, password: str, salt=None):
+        salt = salt or os.urandom(32)
+        key = hashlib.pbkdf2_hmac('sha256',password.encode(),salt,10000)
+        return (salt+key)
 
-    def login(self,login: str, password: str): 
-        h, p = Protocol.encode(Header.LOG,login=login,password=password)
+    def login(self,login: str, password: str):
+        if self.username == None and self.password == None:
+            self.username = login
+            self.password = password
+
+        if self.salt == None:
+            h, p = Protocol.encode(Header.LOG,login=self.username,password='X')
+        else:
+            h, p = Protocol.encode(Header.LOG,login=self.username,password=self.passwordHash(self.password,self.salt).hex())
         self.transfer(h,p)
 
     def register(self,login: str, password: str, email: str):
-        h, p = Protocol.encode(Header.REG,login=login,password=password,email=email)
+        h, p = Protocol.encode(Header.REG,login=login,password=self.passwordHash(password).hex(),email=email)
         self.transfer(h,p)
 
     def password(self, password: str): 
-        h, p = Protocol.encode(Header.CHP,password=password)
+        h, p = Protocol.encode(Header.CHP,password=self.passwordHash(password).hex())
         self.transfer(h,p)
 
     def mail(self, email: str): 
