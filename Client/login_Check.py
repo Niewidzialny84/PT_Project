@@ -99,7 +99,7 @@ def register_Check(nick, password, confirm, mail, language):
                 message = QMessageBox()
                 message.setWindowTitle("Błąd")
                 message.setIcon(QMessageBox.Critical)
-                message.setText("Niepoprawny E-Mail!")
+                message.setText("Niepoprawny e-mail!")
                 message.exec_()
         else:
             return True
@@ -152,7 +152,7 @@ def mail_New_Check(mail, language):
             message = QMessageBox()
             message.setWindowTitle("Błąd")
             message.setIcon(QMessageBox.Critical)
-            message.setText("Niepoprawny E-Mail!")
+            message.setText("Niepoprawny e-mail!")
             message.exec_()
     else:
         return True

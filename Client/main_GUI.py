@@ -195,8 +195,8 @@ class Ui_MainWindow(ABC):
             self.OptionsWindow.options_ui.language_Box.setCurrentIndex(1)
             self.OptionsWindow.options_ui.password_Edit.setPlaceholderText("Wpisz nowe hasło")
             self.OptionsWindow.options_ui.password_Button.setText("Zmień hasło")
-            self.OptionsWindow.options_ui.mail_Edit.setPlaceholderText("Wpisz nowy E-Mail")
-            self.OptionsWindow.options_ui.mail_Button.setText("Zmień E-Mail")
+            self.OptionsWindow.options_ui.mail_Edit.setPlaceholderText("Wpisz nowy e-mail")
+            self.OptionsWindow.options_ui.mail_Button.setText("Zmień e-mail")
             self.OptionsWindow.options_ui.delete_Button.setText("Usuń konto")
             self.OptionsWindow.options_ui.back_Button.setText("Wróć")
         else:
@@ -206,10 +206,10 @@ class Ui_MainWindow(ABC):
             self.language = "English"
             self.OptionsWindow.options_ui.language_Box.setCurrentIndex(0)
             self.OptionsWindow.options_ui.password_Edit.setPlaceholderText("Enter new password")
-            self.OptionsWindow.options_ui.password_Button.setText("Change Password")
+            self.OptionsWindow.options_ui.password_Button.setText("Change password")
             self.OptionsWindow.options_ui.mail_Edit.setPlaceholderText("Enter new mail")
-            self.OptionsWindow.options_ui.mail_Button.setText("Change Mail")
-            self.OptionsWindow.options_ui.delete_Button.setText("Delete Account")
+            self.OptionsWindow.options_ui.mail_Button.setText("Change mail")
+            self.OptionsWindow.options_ui.delete_Button.setText("Delete account")
             self.OptionsWindow.options_ui.back_Button.setText("Back")
 
     #Logout
@@ -313,7 +313,7 @@ class Ui_OptionWindow(object):
         self.password_Button = QtWidgets.QPushButton(self.centralwidget)
         self.password_Button.setGeometry(QtCore.QRect(80, 110, 111, 23))
         self.password_Button.setObjectName("password_Button")
-        self.password_Button.setText("Change Password")
+        self.password_Button.setText("Change password")
         self.password_Button.pressed.connect(lambda:self.update_Password(OptionsWindow))
         self.password_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
@@ -328,7 +328,7 @@ class Ui_OptionWindow(object):
         self.mail_Button = QtWidgets.QPushButton(self.centralwidget)
         self.mail_Button.setGeometry(QtCore.QRect(80, 180, 111, 23))
         self.mail_Button.setObjectName("mail_Button")
-        self.mail_Button.setText("Change Mail")
+        self.mail_Button.setText("Change mail")
         self.mail_Button.pressed.connect(lambda:self.update_Mail(OptionsWindow))
         self.mail_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
@@ -336,7 +336,7 @@ class Ui_OptionWindow(object):
         self.delete_Button = QtWidgets.QPushButton(self.centralwidget)
         self.delete_Button.setGeometry(QtCore.QRect(80, 220, 111, 23))
         self.delete_Button.setObjectName("delete_Button")
-        self.delete_Button.setText("Delete Account")
+        self.delete_Button.setText("Delete account")
         self.delete_Button.pressed.connect(lambda:OptionsWindow.delete_signal.emit())
         self.delete_Button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 

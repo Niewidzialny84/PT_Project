@@ -137,13 +137,13 @@ class login_Master(login_GUI.Ui_MainWindow):
                 message = QtWidgets.QMessageBox()
                 message.setWindowTitle("Mail send")
                 message.setIcon(QtWidgets.QMessageBox.Information)
-                message.setText("An email with your password was sent!")
+                message.setText("An email with your password override was sent!")
                 message.exec_()
             else:
                 message = QtWidgets.QMessageBox()
                 message.setWindowTitle("Wysłano E-Mail")
                 message.setIcon(QtWidgets.QMessageBox.Information)
-                message.setText("Wysłano E-Mail z twoim hasłem!")
+                message.setText("Wysłano e-mail z możliwością nadpisania hasłem!")
                 message.exec_()
             if MainWindow.client != None:
                 MainWindow.client.stop()
@@ -246,7 +246,7 @@ class main_Master(main_GUI.Ui_MainWindow):
                 message = QtWidgets.QMessageBox()
                 message.setWindowTitle("Powodzenie")
                 message.setIcon(QtWidgets.QMessageBox.Information)
-                message.setText("Powiodła się zmiana E-Maila!")
+                message.setText("Powiodła się zmiana e-maila!")
                 message.exec_()
         elif(message == 'Deletion succesfull'):
             delete_Account(self.OptionsWindow)
@@ -276,7 +276,7 @@ class main_Master(main_GUI.Ui_MainWindow):
                 message = QtWidgets.QMessageBox()
                 message.setWindowTitle("Błąd")
                 message.setIcon(QtWidgets.QMessageBox.Critical)
-                message.setText("Wystąpił błąd. Nie można zmienić E-Maila!")
+                message.setText("Wystąpił błąd. Nie można zmienić e-maila!")
                 message.exec_()
         elif(err == 'Deletion failed'):
             if(self.language=="English"):
